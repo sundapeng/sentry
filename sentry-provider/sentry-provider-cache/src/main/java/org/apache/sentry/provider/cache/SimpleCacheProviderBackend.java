@@ -66,6 +66,13 @@ public class SimpleCacheProviderBackend implements ProviderBackend {
   }
 
   @Override
+  public ImmutableSet<String> getPrivileges(Set<String> groups, Set<String> users,
+      ActiveRoleSet roleSet, Authorizable... authorizableHierarchy) {
+    // SimpleCacheProviderBackend doesn't support getPrivileges for user now.
+    return getPrivileges(groups, roleSet, authorizableHierarchy);
+  }
+
+  @Override
   public ImmutableSet<String> getRoles(Set<String> groups, ActiveRoleSet roleSet) {
     if (!initialized()) {
       throw new IllegalStateException(

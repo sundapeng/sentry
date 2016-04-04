@@ -22,15 +22,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import org.junit.Assert;
-
 import org.apache.sentry.core.model.db.AccessConstants;
 import org.apache.sentry.provider.db.generic.service.thrift.TAuthorizable;
+import org.apache.sentry.provider.db.service.thrift.TAlterSentryRoleAddUsersRequest;
+import org.apache.sentry.provider.db.service.thrift.TAlterSentryRoleDeleteUsersRequest;
 import org.apache.sentry.provider.db.service.thrift.TAlterSentryRoleGrantPrivilegeRequest;
 import org.apache.sentry.provider.db.service.thrift.TAlterSentryRoleRevokePrivilegeRequest;
 import org.apache.sentry.provider.db.service.thrift.TSentryGrantOption;
 import org.apache.sentry.provider.db.service.thrift.TSentryPrivilege;
 import org.apache.sentry.service.thrift.ServiceConstants.PrivilegeScope;
+import org.junit.Assert;
 import org.junit.Test;
 
 import com.google.common.collect.Sets;
@@ -79,6 +80,25 @@ public class TestCommandUtil extends Assert {
     assertEquals(createRoleAddGroupCmdExcepted, createRoleAddGroupCmdResult);
     assertEquals(createRoleDeleteGroupCmdExcepted,
         createRoleDeleteGroupCmdResult);
+  }
+
+  @Test
+  public void testCreateCmdForRoleAddOrDeleteUser1() {
+
+    TAlterSentryRoleAddUsersRequest requestAdd = getRoleAddUsersRequest();
+    TAlterSentryRoleDeleteUsersRequest requestDelete = getRoleDeleteUsersRequest();
+
+    Set<String> users = Sets.newHashSet("user1");
+    requestAdd.setUsers(users);
+    requestDelete.setUsers(users);
+
+    String createRoleAddGroupCmdResult = CommandUtil.createCmdForRoleAddUser(requestAdd);
+    String createRoleAddGroupCmdExcepted = "GRANT ROLE testRole TO USER user1";
+    String createRoleDeleteGroupCmdResult = CommandUtil.createCmdForRoleDeleteUser(requestDelete);
+    String createRoleDeleteGroupCmdExcepted = "REVOKE ROLE testRole FROM USER user1";
+
+    assertEquals(createRoleAddGroupCmdExcepted, createRoleAddGroupCmdResult);
+    assertEquals(createRoleDeleteGroupCmdExcepted, createRoleDeleteGroupCmdResult);
   }
 
   @Test
@@ -316,6 +336,18 @@ public class TestCommandUtil extends Assert {
 
     assertEquals(createGrantPrivilegeCmdExcepted, createGrantPrivilegeCmdResult);
     assertEquals(createRevokePrivilegeCmdExcepted, createRevokePrivilegeCmdResult);
+  }
+
+  private TAlterSentryRoleAddUsersRequest getRoleAddUsersRequest() {
+    TAlterSentryRoleAddUsersRequest request = new TAlterSentryRoleAddUsersRequest();
+    request.setRoleName("testRole");
+    return request;
+  }
+
+  private TAlterSentryRoleDeleteUsersRequest getRoleDeleteUsersRequest() {
+    TAlterSentryRoleDeleteUsersRequest request = new TAlterSentryRoleDeleteUsersRequest();
+    request.setRoleName("testRole");
+    return request;
   }
 
   private String getGroupStr(int num) {

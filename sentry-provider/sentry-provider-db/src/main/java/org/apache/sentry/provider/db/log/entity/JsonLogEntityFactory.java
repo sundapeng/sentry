@@ -30,8 +30,12 @@ import org.apache.sentry.provider.db.log.util.CommandUtil;
 import org.apache.sentry.provider.db.log.util.Constants;
 import org.apache.sentry.provider.db.service.thrift.TAlterSentryRoleAddGroupsRequest;
 import org.apache.sentry.provider.db.service.thrift.TAlterSentryRoleAddGroupsResponse;
+import org.apache.sentry.provider.db.service.thrift.TAlterSentryRoleAddUsersRequest;
+import org.apache.sentry.provider.db.service.thrift.TAlterSentryRoleAddUsersResponse;
 import org.apache.sentry.provider.db.service.thrift.TAlterSentryRoleDeleteGroupsRequest;
 import org.apache.sentry.provider.db.service.thrift.TAlterSentryRoleDeleteGroupsResponse;
+import org.apache.sentry.provider.db.service.thrift.TAlterSentryRoleDeleteUsersRequest;
+import org.apache.sentry.provider.db.service.thrift.TAlterSentryRoleDeleteUsersResponse;
 import org.apache.sentry.provider.db.service.thrift.TAlterSentryRoleGrantPrivilegeRequest;
 import org.apache.sentry.provider.db.service.thrift.TAlterSentryRoleGrantPrivilegeResponse;
 import org.apache.sentry.provider.db.service.thrift.TAlterSentryRoleRevokePrivilegeRequest;
@@ -174,6 +178,24 @@ public class JsonLogEntityFactory {
       }
     }
     return groups.toString();
+  }
+
+  public JsonLogEntity createJsonLogEntity(TAlterSentryRoleAddUsersRequest request,
+      TAlterSentryRoleAddUsersResponse response, Configuration conf) {
+    AuditMetadataLogEntity amle = createCommonHAMLE(conf, response.getStatus(),
+        request.getRequestorUserName(), request.getClass().getName());
+    amle.setOperationText(CommandUtil.createCmdForRoleAddUser(request));
+
+    return amle;
+  }
+
+  public JsonLogEntity createJsonLogEntity(TAlterSentryRoleDeleteUsersRequest request,
+      TAlterSentryRoleDeleteUsersResponse response, Configuration conf) {
+    AuditMetadataLogEntity amle = createCommonHAMLE(conf, response.getStatus(),
+        request.getRequestorUserName(), request.getClass().getName());
+    amle.setOperationText(CommandUtil.createCmdForRoleDeleteUser(request));
+
+    return amle;
   }
 
   public String isAllowed(TSentryResponseStatus status) {

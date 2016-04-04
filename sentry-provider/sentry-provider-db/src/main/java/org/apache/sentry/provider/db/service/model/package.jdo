@@ -45,6 +45,24 @@
         
     </class>
     
+    <class name="MSentryUser" identity-type="datastore" table="SENTRY_USER" detachable="true">  
+      <datastore-identity>
+        <column name="USER_ID"/>
+      </datastore-identity>
+      <field name="userName">  
+        <column name="USER_NAME" length="128" jdbc-type="VARCHAR"/>
+        <index name="SentryUserName" unique="true"/>
+      </field>
+      <field name = "createTime">
+      	<column name = "CREATE_TIME" jdbc-type="BIGINT"/>
+      </field>
+
+      <field name="roles" mapped-by="users">
+         <collection element-type="org.apache.sentry.provider.db.service.model.MSentryRole"/>
+      </field>
+        
+    </class>
+    
     <class name="MSentryRole" identity-type="datastore" table="SENTRY_ROLE" detachable="true">  
       <datastore-identity>
         <column name="ROLE_ID"/>
@@ -76,13 +94,23 @@
             </element>
       </field>
 
-      <field name = "groups" table="SENTRY_ROLE_GROUP_MAP" >
+      <field name = "groups" table="SENTRY_ROLE_GROUP_MAP" default-fetch-group="true">
         <collection element-type="org.apache.sentry.provider.db.service.model.MSentryGroup"/>
             <join>
                 <column name="ROLE_ID"/>
             </join>
             <element>
                 <column name="GROUP_ID"/>
+            </element>
+      </field>
+      
+      <field name = "users" table="SENTRY_ROLE_USER_MAP" default-fetch-group="true">
+        <collection element-type="org.apache.sentry.provider.db.service.model.MSentryUser"/>
+            <join>
+                <column name="ROLE_ID"/>
+            </join>
+            <element>
+                <column name="USER_ID"/>
             </element>
       </field>
     </class>

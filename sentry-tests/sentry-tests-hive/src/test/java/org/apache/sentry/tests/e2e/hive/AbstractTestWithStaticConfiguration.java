@@ -61,9 +61,9 @@ import org.apache.sentry.tests.e2e.hive.fs.DFS;
 import org.apache.sentry.tests.e2e.hive.fs.DFSFactory;
 import org.apache.sentry.tests.e2e.hive.hiveserver.HiveServer;
 import org.apache.sentry.tests.e2e.hive.hiveserver.HiveServerFactory;
+import org.apache.sentry.tests.e2e.minisentry.SentrySrv;
 import org.apache.sentry.tests.e2e.minisentry.SentrySrvFactory;
 import org.apache.sentry.tests.e2e.minisentry.SentrySrvFactory.SentrySrvType;
-import org.apache.sentry.tests.e2e.minisentry.SentrySrv;
 import org.apache.tools.ant.util.StringUtils;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -72,7 +72,9 @@ import org.junit.BeforeClass;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Multimap;
 import com.google.common.io.Files;
 
 import javax.security.auth.Subject;
@@ -143,6 +145,7 @@ public abstract class AbstractTestWithStaticConfiguration {
   protected static boolean enableSentryHA = false;
   protected static Context context;
   protected final String semanticException = "SemanticException No valid privileges";
+  protected static Multimap<String, String> usersToGroups = ArrayListMultimap.create();
 
   protected static boolean clientKerberos = false;
   protected static String REALM = System.getProperty("sentry.service.realm", "EXAMPLE.COM");
@@ -253,6 +256,9 @@ public abstract class AbstractTestWithStaticConfiguration {
 
     PolicyFile policyFile = PolicyFile.setAdminOnServer1(ADMIN1)
         .setUserGroupMapping(StaticUserGroup.getStaticMapping());
+    if (usersToGroups.size() > 0) {
+      policyFile.addCustomerUsersToGroups(usersToGroups);
+    }
     policyFile.write(policyFileLocation);
 
     String policyURI;

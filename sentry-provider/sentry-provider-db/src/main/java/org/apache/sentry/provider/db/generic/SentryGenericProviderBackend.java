@@ -140,6 +140,12 @@ public class SentryGenericProviderBackend implements ProviderBackend {
   }
 
   @Override
+  public ImmutableSet<String> getPrivileges(Set<String> groups, Set<String> users,
+                                              ActiveRoleSet roleSet, Authorizable... authorizableHierarchy) {
+    throw new IllegalStateException("SentryGenericProviderBackend doesn't support getUGPrivileges.");
+  }
+
+  @Override
   public void close() {
   }
 

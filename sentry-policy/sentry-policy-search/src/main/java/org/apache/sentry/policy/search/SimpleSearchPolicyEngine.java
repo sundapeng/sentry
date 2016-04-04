@@ -21,8 +21,8 @@ import java.util.Set;
 import org.apache.sentry.core.common.ActiveRoleSet;
 import org.apache.sentry.core.common.Authorizable;
 import org.apache.sentry.core.common.SentryConfigurationException;
-import org.apache.sentry.policy.common.PrivilegeFactory;
 import org.apache.sentry.policy.common.PolicyEngine;
+import org.apache.sentry.policy.common.PrivilegeFactory;
 import org.apache.sentry.policy.common.PrivilegeValidator;
 import org.apache.sentry.provider.common.ProviderBackend;
 import org.apache.sentry.provider.common.ProviderBackendContext;
@@ -80,6 +80,25 @@ public class SimpleSearchPolicyEngine implements PolicyEngine {
       LOGGER.debug("result = " + result);
     }
     return result;
+  }
+
+  @Override
+  public ImmutableSet<String> getAllPrivileges(Set<String> groups, Set<String> users,
+      ActiveRoleSet roleSet) throws SentryConfigurationException {
+    throw new SentryConfigurationException(
+        "SimpleSearchPolicyEngine doesn't support getAllUGPrivileges!");
+  }
+
+  @Override
+  public ImmutableSet<String> getPrivileges(Set<String> groups, Set<String> users,
+      ActiveRoleSet roleSet, Authorizable... authorizationHierarchy) {
+    throw new SentryConfigurationException(
+        "SimpleSearchPolicyEngine doesn't support getUGPrivileges!");
+  }
+
+  @Override
+  public boolean isSupportPrivilegeForUser() {
+    return false;
   }
 
   @Override

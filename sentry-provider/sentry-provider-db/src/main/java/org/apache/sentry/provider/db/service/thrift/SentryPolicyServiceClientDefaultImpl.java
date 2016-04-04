@@ -247,7 +247,34 @@ public class SentryPolicyServiceClientDefaultImpl implements SentryPolicyService
     }
   }
 
-  public synchronized Set<TSentryPrivilege> listAllPrivilegesByRoleName(String requestorUserName, String roleName)
+  /**
+   * Gets sentry role objects for a given userName using the Sentry service
+   * 
+   * @param requestorUserName
+   *        : user on whose behalf the request is issued
+   * @param userName
+   *        : userName to look up (can't be empty)
+   * @return Set of thrift sentry role objects
+   * @throws SentryUserException
+   */
+  public Set<TSentryRole> listRolesByUserName(String requestorUserName, String userName)
+      throws SentryUserException {
+    TListSentryRolesForUserRequest request = new TListSentryRolesForUserRequest();
+    request.setProtocol_version(ThriftConstants.TSENTRY_SERVICE_VERSION_CURRENT);
+    request.setRequestorUserName(requestorUserName);
+    request.setUserName(userName);
+    TListSentryRolesResponse response;
+    try {
+      response = client.list_sentry_roles_by_user(request);
+      Status.throwIfNotOk(response.getStatus());
+      return response.getRoles();
+    } catch (TException e) {
+      throw new SentryUserException(THRIFT_EXCEPTION_MESSAGE, e);
+    }
+  }
+
+  public synchronized Set<TSentryPrivilege> listAllPrivilegesByRoleName(String requestorUserName,
+      String roleName)
                  throws SentryUserException {
     return listPrivilegesByRoleName(requestorUserName, roleName, null);
   }
@@ -667,12 +694,12 @@ public class SentryPolicyServiceClientDefaultImpl implements SentryPolicyService
     return TSentryGrantOption.FALSE;
   }
 
-  public synchronized Set<String> listPrivilegesForProvider(Set<String> groups, ActiveRoleSet roleSet, Authorizable... authorizable)
-  throws SentryUserException {
+  public synchronized Set<String> listPrivilegesForProvider(Set<String> groups, Set<String> users,
+      ActiveRoleSet roleSet, Authorizable... authorizable) throws SentryUserException {
     TSentryActiveRoleSet thriftRoleSet = new TSentryActiveRoleSet(roleSet.isAll(), roleSet.getRoles());
     TListSentryPrivilegesForProviderRequest request =
         new TListSentryPrivilegesForProviderRequest(ThriftConstants.
-            TSENTRY_SERVICE_VERSION_CURRENT, groups, thriftRoleSet);
+            TSENTRY_SERVICE_VERSION_CURRENT, groups, thriftRoleSet, users);
     if (authorizable != null && authorizable.length > 0) {
       TSentryAuthorizable tSentryAuthorizable = setupSentryAuthorizable(Lists
           .newArrayList(authorizable));
@@ -725,6 +752,44 @@ public class SentryPolicyServiceClientDefaultImpl implements SentryPolicyService
         roleName, convert2TGroups(groups));
     try {
       TAlterSentryRoleDeleteGroupsResponse response = client.alter_sentry_role_delete_groups(request);
+      Status.throwIfNotOk(response.getStatus());
+    } catch (TException e) {
+      throw new SentryUserException(THRIFT_EXCEPTION_MESSAGE, e);
+    }
+  }
+
+  @Override
+  public synchronized void grantRoleToUser(String requestorUserName, String userName,
+      String roleName) throws SentryUserException {
+    grantRoleToUsers(requestorUserName, roleName, Sets.newHashSet(userName));
+  }
+
+  @Override
+  public synchronized void revokeRoleFromUser(String requestorUserName, String userName,
+      String roleName) throws SentryUserException {
+    revokeRoleFromUsers(requestorUserName, roleName, Sets.newHashSet(userName));
+  }
+
+  @Override
+  public synchronized void grantRoleToUsers(String requestorUserName, String roleName,
+      Set<String> users) throws SentryUserException {
+    TAlterSentryRoleAddUsersRequest request = new TAlterSentryRoleAddUsersRequest(
+        ThriftConstants.TSENTRY_SERVICE_VERSION_CURRENT, requestorUserName, roleName, users);
+    try {
+      TAlterSentryRoleAddUsersResponse response = client.alter_sentry_role_add_users(request);
+      Status.throwIfNotOk(response.getStatus());
+    } catch (TException e) {
+      throw new SentryUserException(THRIFT_EXCEPTION_MESSAGE, e);
+    }
+  }
+
+  @Override
+  public synchronized void revokeRoleFromUsers(String requestorUserName, String roleName,
+      Set<String> users) throws SentryUserException {
+    TAlterSentryRoleDeleteUsersRequest request = new TAlterSentryRoleDeleteUsersRequest(
+        ThriftConstants.TSENTRY_SERVICE_VERSION_CURRENT, requestorUserName, roleName, users);
+    try {
+      TAlterSentryRoleDeleteUsersResponse response = client.alter_sentry_role_delete_users(request);
       Status.throwIfNotOk(response.getStatus());
     } catch (TException e) {
       throw new SentryUserException(THRIFT_EXCEPTION_MESSAGE, e);

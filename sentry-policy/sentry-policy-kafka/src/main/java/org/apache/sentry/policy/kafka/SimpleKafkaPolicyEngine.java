@@ -84,4 +84,24 @@ public class SimpleKafkaPolicyEngine implements PolicyEngine {
     }
   }
 
+  @Override
+  public ImmutableSet<String> getAllPrivileges(Set<String> groups, Set<String> users,
+      ActiveRoleSet roleSet) throws SentryConfigurationException {
+    throw new SentryConfigurationException(
+        "SimpleKafkaPolicyEngine doesn't support getPrivileges!");
+  }
+
+  @Override
+  public ImmutableSet<String> getPrivileges(Set<String> groups, Set<String> users,
+      ActiveRoleSet roleSet, Authorizable... authorizableHierarchy)
+      throws SentryConfigurationException {
+    throw new SentryConfigurationException(
+        "SimpleKafkaPolicyEngine doesn't support getPrivileges!");
+  }
+
+  @Override
+  public boolean isSupportPrivilegeForUser() {
+    return false;
+  }
+
 }

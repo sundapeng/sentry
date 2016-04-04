@@ -95,6 +95,11 @@ public class PolicyFile {
     }
     return this;
   }
+
+  public void addCustomerUsersToGroups(Multimap<String, String> customerUsersToGroups) {
+    usersToGroups.putAll(customerUsersToGroups);
+  }
+
   public PolicyFile addDatabase(String databaseName, String path) {
     String oldPath;
     if((oldPath = databasesToPolicyFiles.put(databaseName, path)) != null) {

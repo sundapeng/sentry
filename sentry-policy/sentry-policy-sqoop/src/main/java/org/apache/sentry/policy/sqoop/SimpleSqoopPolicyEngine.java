@@ -69,6 +69,25 @@ public class SimpleSqoopPolicyEngine implements PolicyEngine {
   }
 
   @Override
+  public ImmutableSet<String> getAllPrivileges(Set<String> groups, Set<String> users,
+      ActiveRoleSet roleSet) throws SentryConfigurationException {
+    throw new SentryConfigurationException(
+        "SimpleSqoopPolicyEngine doesn't support getAllUGPrivileges!");
+  }
+
+  @Override
+  public ImmutableSet<String> getPrivileges(Set<String> groups, Set<String> users,
+      ActiveRoleSet roleSet, Authorizable... authorizationHierarchy) {
+    throw new SentryConfigurationException(
+        "SimpleSqoopPolicyEngine doesn't support getUGPrivileges!");
+  }
+
+  @Override
+  public boolean isSupportPrivilegeForUser() {
+    return false;
+  }
+
+  @Override
   public void close() {
     if (providerBackend != null) {
       providerBackend.close();

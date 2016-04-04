@@ -24,7 +24,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
-import com.codahale.metrics.Timer;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.sentry.hdfs.ServiceConstants.ServerConfig;
 import org.apache.sentry.hdfs.UpdateForwarder.ExternalImageRetriever;
@@ -34,7 +33,9 @@ import org.apache.sentry.hdfs.service.thrift.TRoleChanges;
 import org.apache.sentry.provider.db.SentryPolicyStorePlugin;
 import org.apache.sentry.provider.db.service.persistent.SentryStore;
 import org.apache.sentry.provider.db.service.thrift.TAlterSentryRoleAddGroupsRequest;
+import org.apache.sentry.provider.db.service.thrift.TAlterSentryRoleAddUsersRequest;
 import org.apache.sentry.provider.db.service.thrift.TAlterSentryRoleDeleteGroupsRequest;
+import org.apache.sentry.provider.db.service.thrift.TAlterSentryRoleDeleteUsersRequest;
 import org.apache.sentry.provider.db.service.thrift.TAlterSentryRoleGrantPrivilegeRequest;
 import org.apache.sentry.provider.db.service.thrift.TAlterSentryRoleRevokePrivilegeRequest;
 import org.apache.sentry.provider.db.service.thrift.TDropPrivilegesRequest;
@@ -45,6 +46,8 @@ import org.apache.sentry.provider.db.service.thrift.TSentryGroup;
 import org.apache.sentry.provider.db.service.thrift.TSentryPrivilege;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.codahale.metrics.Timer;
 
 public class SentryPlugin implements SentryPolicyStorePlugin {
 
@@ -159,6 +162,18 @@ public class SentryPlugin implements SentryPolicyStorePlugin {
     }
     permsUpdater.handleUpdateNotification(update);
     LOGGER.debug("Authz Perm preUpdate [" + update.getSeqNum() + ", " + request.getRoleName() + "]..");
+  }
+
+  @Override
+  public void onAlterSentryRoleAddUsers(TAlterSentryRoleAddUsersRequest tRequest)
+      throws SentryPluginException {
+    // todo: handle the role update
+  }
+
+  @Override
+  public void onAlterSentryRoleDeleteUsers(TAlterSentryRoleDeleteUsersRequest tRequest)
+      throws SentryPluginException {
+    // todo: handle the role update
   }
 
   @Override

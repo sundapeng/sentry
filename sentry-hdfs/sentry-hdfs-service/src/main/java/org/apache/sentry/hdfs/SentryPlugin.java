@@ -165,18 +165,6 @@ public class SentryPlugin implements SentryPolicyStorePlugin {
   }
 
   @Override
-  public void onAlterSentryRoleAddUsers(TAlterSentryRoleAddUsersRequest tRequest)
-      throws SentryPluginException {
-    // todo: handle the role update
-  }
-
-  @Override
-  public void onAlterSentryRoleDeleteUsers(TAlterSentryRoleDeleteUsersRequest tRequest)
-      throws SentryPluginException {
-    // todo: handle the role update
-  }
-
-  @Override
   public void onAlterSentryRoleGrantPrivilege(
       TAlterSentryRoleGrantPrivilegeRequest request)
           throws SentryPluginException {

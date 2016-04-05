@@ -22,9 +22,7 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.sentry.SentryUserException;
 import org.apache.sentry.provider.db.service.persistent.SentryStore;
 import org.apache.sentry.provider.db.service.thrift.TAlterSentryRoleAddGroupsRequest;
-import org.apache.sentry.provider.db.service.thrift.TAlterSentryRoleAddUsersRequest;
 import org.apache.sentry.provider.db.service.thrift.TAlterSentryRoleDeleteGroupsRequest;
-import org.apache.sentry.provider.db.service.thrift.TAlterSentryRoleDeleteUsersRequest;
 import org.apache.sentry.provider.db.service.thrift.TAlterSentryRoleGrantPrivilegeRequest;
 import org.apache.sentry.provider.db.service.thrift.TAlterSentryRoleRevokePrivilegeRequest;
 import org.apache.sentry.provider.db.service.thrift.TDropPrivilegesRequest;
@@ -58,11 +56,5 @@ public interface SentryPolicyStorePlugin {
   void onRenameSentryPrivilege(TRenamePrivilegesRequest request) throws SentryPluginException;
 
   void onDropSentryPrivilege(TDropPrivilegesRequest request) throws SentryPluginException;
-
-  void onAlterSentryRoleAddUsers(TAlterSentryRoleAddUsersRequest tRequest)
-      throws SentryPluginException;
-
-  void onAlterSentryRoleDeleteUsers(TAlterSentryRoleDeleteUsersRequest tRequest)
-      throws SentryPluginException;
 
 }

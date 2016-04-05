@@ -159,8 +159,7 @@ public class SimpleFileProviderBackend implements ProviderBackend {
   @Override
   public ImmutableSet<String> getPrivileges(Set<String> groups, Set<String> users,
       ActiveRoleSet roleSet, Authorizable... authorizableHierarchy) {
-    // SimpleFileProviderBackend doesn't support getPrivileges for user now.
-    return getPrivileges(groups, roleSet, authorizableHierarchy);
+    throw new IllegalStateException("SimpleFileProviderBackend doesn't support getPrivileges for user now.");
   }
 
   /**

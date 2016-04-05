@@ -66,7 +66,7 @@ public class SimpleDBProviderBackend implements ProviderBackend {
   @Override
   public ImmutableSet<String> getPrivileges(Set<String> groups, ActiveRoleSet roleSet,
       Authorizable... authorizableHierarchy) {
-    return getPrivileges(groups, Sets.newHashSet(""), roleSet, authorizableHierarchy);
+    return getPrivileges(groups, null, roleSet, authorizableHierarchy);
   }
 
   /**

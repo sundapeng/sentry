@@ -508,9 +508,6 @@ public class SentryPolicyStoreProcessor implements SentryPolicyService.Iface {
           request.getUsers());
       response.setStatus(Status.OK());
       notificationHandlerInvoker.alter_sentry_role_add_users(commitContext, request, response);
-      for (SentryPolicyStorePlugin plugin : sentryPlugins) {
-        plugin.onAlterSentryRoleAddUsers(request);
-      }
     } catch (SentryNoSuchObjectException e) {
       String msg = "Role: " + request + " does not exist.";
       LOGGER.error(msg, e);
@@ -548,9 +545,6 @@ public class SentryPolicyStoreProcessor implements SentryPolicyService.Iface {
           request.getUsers());
       response.setStatus(Status.OK());
       notificationHandlerInvoker.alter_sentry_role_delete_users(commitContext, request, response);
-      for (SentryPolicyStorePlugin plugin : sentryPlugins) {
-        plugin.onAlterSentryRoleDeleteUsers(request);
-      }
     } catch (SentryNoSuchObjectException e) {
       String msg = "Role: " + request + " does not exist.";
       LOGGER.error(msg, e);

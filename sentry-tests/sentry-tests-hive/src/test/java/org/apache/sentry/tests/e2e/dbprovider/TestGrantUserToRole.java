@@ -103,7 +103,7 @@ public class TestGrantUserToRole extends AbstractTestWithStaticConfiguration {
     // user1 get the role1 for group1
     ResultSet resultSet = statement.executeQuery("SHOW ROLE GRANT USER " + USER1);
     verifyResultRoles(resultSet, Sets.newHashSet(ROLENAME1.toLowerCase()));
-    
+
     // user2 get the role1 for group1 and role2 for user2
     resultSet = statement.executeQuery("SHOW ROLE GRANT USER " + USER2);
     verifyResultRoles(resultSet, Sets.newHashSet(ROLENAME1.toLowerCase(), ROLENAME3.toLowerCase()));
@@ -136,7 +136,7 @@ public class TestGrantUserToRole extends AbstractTestWithStaticConfiguration {
     }
     statement.close();
     connection.close();
-    
+
     connection = context.createConnection(USER2);
     statement = context.createStatement(connection);
     // test the command : show current roles

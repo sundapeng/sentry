@@ -96,8 +96,8 @@ public class PolicyFile {
     return this;
   }
 
-  public void addCustomerUsersToGroups(Multimap<String, String> customerUsersToGroups) {
-    usersToGroups.putAll(customerUsersToGroups);
+  public void appendUserGroupsMappings(Multimap<String, String> mapping) {
+    usersToGroups.putAll(mapping);
   }
 
   public PolicyFile addDatabase(String databaseName, String path) {

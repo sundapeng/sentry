@@ -238,9 +238,9 @@ public class SentryGrantRevokeTask extends Task<DDLWork> implements Serializable
         Set<TSentryRole> roles;
         PrincipalType principalType = desc.getPrincipalType();
         if (principalType == PrincipalType.GROUP) {
-          roles = sentryClient.listRolesByGroupName(subject, desc.getName());
+          roles = sentryClient.listRolesByGroupName(subject, name);
         } else if (principalType == PrincipalType.USER) {
-          roles = sentryClient.listRolesByUserName(subject, desc.getName());
+          roles = sentryClient.listRolesByUserName(subject, name);
         } else {
           String msg = SentryHiveConstants.GRANT_REVOKE_NOT_SUPPORTED_FOR_PRINCIPAL + principalType;
           throw new HiveException(msg);

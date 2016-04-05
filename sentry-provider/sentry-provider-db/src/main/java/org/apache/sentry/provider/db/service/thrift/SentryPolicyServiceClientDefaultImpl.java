@@ -249,7 +249,7 @@ public class SentryPolicyServiceClientDefaultImpl implements SentryPolicyService
 
   /**
    * Gets sentry role objects for a given userName using the Sentry service
-   * 
+   *
    * @param requestorUserName
    *        : user on whose behalf the request is issued
    * @param userName

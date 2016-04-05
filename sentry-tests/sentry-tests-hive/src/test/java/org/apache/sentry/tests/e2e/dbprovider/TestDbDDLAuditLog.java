@@ -211,14 +211,6 @@ public class TestDbDDLAuditLog extends AbstractTestWithStaticConfiguration {
     fieldValueMap.put(Constants.LOG_FIELD_IP_ADDRESS, null);
     assertAuditLog(fieldValueMap);
 
-    statement.execute("REVOKE ROLE " + roleName + " FROM USER " + userName);
-    fieldValueMap.clear();
-    fieldValueMap.put(Constants.LOG_FIELD_OPERATION, Constants.OPERATION_DELETE_ROLE_USER);
-    fieldValueMap.put(Constants.LOG_FIELD_OPERATION_TEXT, "REVOKE ROLE " + roleName + " FROM USER "
-        + userName);
-    fieldValueMap.put(Constants.LOG_FIELD_ALLOWED, Constants.TRUE);
-    assertAuditLog(fieldValueMap);
-
     statement.execute("REVOKE ROLE " + roleName + " FROM GROUP " + groupName);
     fieldValueMap.clear();
     fieldValueMap.put(Constants.LOG_FIELD_OPERATION, Constants.OPERATION_DELETE_ROLE);
@@ -226,6 +218,14 @@ public class TestDbDDLAuditLog extends AbstractTestWithStaticConfiguration {
         + " FROM GROUP " + groupName);
     fieldValueMap.put(Constants.LOG_FIELD_ALLOWED, Constants.TRUE);
     fieldValueMap.put(Constants.LOG_FIELD_IP_ADDRESS, null);
+    assertAuditLog(fieldValueMap);
+
+    statement.execute("REVOKE ROLE " + roleName + " FROM USER " + userName);
+    fieldValueMap.clear();
+    fieldValueMap.put(Constants.LOG_FIELD_OPERATION, Constants.OPERATION_DELETE_ROLE_USER);
+    fieldValueMap.put(Constants.LOG_FIELD_OPERATION_TEXT, "REVOKE ROLE " + roleName + " FROM USER "
+        + userName);
+    fieldValueMap.put(Constants.LOG_FIELD_ALLOWED, Constants.TRUE);
     assertAuditLog(fieldValueMap);
 
     statement.execute("DROP ROLE " + roleName);

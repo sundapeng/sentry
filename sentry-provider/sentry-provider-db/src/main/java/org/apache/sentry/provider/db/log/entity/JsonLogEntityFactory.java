@@ -184,7 +184,8 @@ public class JsonLogEntityFactory {
       TAlterSentryRoleAddUsersResponse response, Configuration conf) {
     AuditMetadataLogEntity amle = createCommonHAMLE(conf, response.getStatus(),
         request.getRequestorUserName(), request.getClass().getName());
-    amle.setOperationText(CommandUtil.createCmdForRoleAddUser(request));
+    String users = getUsersStr(request.getUsersIterator());
+    amle.setOperationText(CommandUtil.createCmdForRoleAddUser(request.getRoleName(), users));
 
     return amle;
   }
@@ -193,9 +194,26 @@ public class JsonLogEntityFactory {
       TAlterSentryRoleDeleteUsersResponse response, Configuration conf) {
     AuditMetadataLogEntity amle = createCommonHAMLE(conf, response.getStatus(),
         request.getRequestorUserName(), request.getClass().getName());
-    amle.setOperationText(CommandUtil.createCmdForRoleDeleteUser(request));
+    String users = getUsersStr(request.getUsersIterator());
+    amle.setOperationText(CommandUtil.createCmdForRoleDeleteUser(request.getRoleName(), users));
 
     return amle;
+  }
+
+  private String getUsersStr(Iterator<String> iter) {
+    StringBuilder users = new StringBuilder("");
+    if (iter != null) {
+      boolean commaFlg = false;
+      while (iter.hasNext()) {
+        if (commaFlg) {
+          users.append(", ");
+        } else {
+          commaFlg = true;
+        }
+        users.append(iter.next());
+      }
+    }
+    return users.toString();
   }
 
   public String isAllowed(TSentryResponseStatus status) {

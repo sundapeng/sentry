@@ -78,6 +78,12 @@ public class Constants {
     requestTypeToOperationMap.put(
         TAlterSentryRoleDeleteGroupsRequest.class.getName(),
         Constants.OPERATION_DELETE_ROLE);
+    requestTypeToOperationMap.put(
+        TAlterSentryRoleAddUsersRequest.class.getName(),
+        Constants.OPERATION_ADD_ROLE_USER);
+    requestTypeToOperationMap.put(
+        TAlterSentryRoleDeleteUsersRequest.class.getName(),
+        Constants.OPERATION_DELETE_ROLE_USER);
 
     // for generic model audit log
     requestTypeToOperationMap.put(
@@ -102,11 +108,6 @@ public class Constants {
             org.apache.sentry.provider.db.generic.service.thrift.TAlterSentryRoleDeleteGroupsRequest.class
                 .getName(), Constants.OPERATION_DELETE_ROLE);
 
-    requestTypeToOperationMap.put(TAlterSentryRoleAddUsersRequest.class.getName(),
-        Constants.OPERATION_ADD_ROLE_USER);
-    requestTypeToOperationMap.put(TAlterSentryRoleDeleteUsersRequest.class.getName(),
-        Constants.OPERATION_DELETE_ROLE_USER);
-
     // for hive audit log
     requestTypeToObjectTypeMap.put(TCreateSentryRoleRequest.class.getName(),
         Constants.OBJECT_TYPE_ROLE);
@@ -118,9 +119,11 @@ public class Constants {
     requestTypeToObjectTypeMap.put(
         TAlterSentryRoleDeleteGroupsRequest.class.getName(),
         Constants.OBJECT_TYPE_ROLE);
-    requestTypeToObjectTypeMap.put(TAlterSentryRoleAddUsersRequest.class.getName(),
+    requestTypeToObjectTypeMap.put(
+        TAlterSentryRoleAddUsersRequest.class.getName(),
         Constants.OBJECT_TYPE_ROLE);
-    requestTypeToObjectTypeMap.put(TAlterSentryRoleDeleteUsersRequest.class.getName(),
+    requestTypeToObjectTypeMap.put(
+        TAlterSentryRoleDeleteUsersRequest.class.getName(),
         Constants.OBJECT_TYPE_ROLE);
     requestTypeToObjectTypeMap.put(
         TAlterSentryRoleGrantPrivilegeRequest.class.getName(),

@@ -21,13 +21,15 @@ package org.apache.sentry.provider.db.log.util;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.util.Enumeration;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
 import org.apache.sentry.core.model.db.AccessConstants;
 import org.apache.sentry.provider.db.generic.service.thrift.TAuthorizable;
-import org.apache.sentry.provider.db.service.thrift.*;
+import org.apache.sentry.provider.db.service.thrift.TAlterSentryRoleGrantPrivilegeRequest;
+import org.apache.sentry.provider.db.service.thrift.TAlterSentryRoleRevokePrivilegeRequest;
+import org.apache.sentry.provider.db.service.thrift.TSentryGrantOption;
+import org.apache.sentry.provider.db.service.thrift.TSentryPrivilege;
 import org.apache.sentry.service.thrift.ServiceConstants.PrivilegeScope;
 import org.datanucleus.util.StringUtils;
 
@@ -44,16 +46,15 @@ public class CommandUtil {
   }
 
   public static String createCmdForRoleAddGroup(String roleName, String groups) {
-    return createCmdForRoleAddOrDeleteGroup(roleName, groups, true);
+    return createCmdForRoleGrant(roleName, groups, true, true);
   }
 
   public static String createCmdForRoleDeleteGroup(String roleName, String groups) {
-    return createCmdForRoleAddOrDeleteGroup(roleName, groups, false);
+    return createCmdForRoleGrant(roleName, groups, false, true);
   }
 
-  private static String createCmdForRoleAddOrDeleteGroup(String roleName,
- String groups,
-      boolean isGrant) {
+  private static String createCmdForRoleGrant(String roleName, String principals,
+      boolean isGrant, boolean isGroup) {
     StringBuilder sb = new StringBuilder();
     if (isGrant) {
       sb.append("GRANT ROLE ");
@@ -67,54 +68,22 @@ public class CommandUtil {
       sb.append(" FROM ");
     }
 
-    if (!StringUtils.isEmpty(groups)) {
-      sb.append("GROUP ").append(groups);
+    String principalType = isGroup ? "GROUP" : "USER";
+    if (!StringUtils.isEmpty(principals)) {
+      sb.append(principalType).append(" ").append(principals);
     } else {
-      sb = new StringBuilder("Missing group information.");
+      sb = new StringBuilder("Missing " + principalType + " information.");
     }
 
     return sb.toString();
   }
 
-  public static String createCmdForRoleAddUser(TAlterSentryRoleAddUsersRequest request) {
-    return createCmdForRoleAddOrDeleteUser(request.getRoleName(), request.getUsersIterator(), true);
+  public static String createCmdForRoleAddUser(String roleName, String users) {
+    return createCmdForRoleGrant(roleName, users, true, false);
   }
 
-  public static String createCmdForRoleDeleteUser(TAlterSentryRoleDeleteUsersRequest request) {
-    return createCmdForRoleAddOrDeleteUser(request.getRoleName(), request.getUsersIterator(), false);
-  }
-
-  private static String createCmdForRoleAddOrDeleteUser(String roleName, Iterator<String> iter,
-      boolean isGrant) {
-    StringBuilder sb = new StringBuilder();
-    if (isGrant) {
-      sb.append("GRANT ROLE ");
-    } else {
-      sb.append("REVOKE ROLE ");
-    }
-    sb.append(roleName);
-    if (isGrant) {
-      sb.append(" TO ");
-    } else {
-      sb.append(" FROM ");
-    }
-
-    if (iter != null) {
-      sb.append("USER ");
-      boolean commaFlg = false;
-      while (iter.hasNext()) {
-        if (commaFlg) {
-          sb.append(", ");
-        } else {
-          commaFlg = true;
-        }
-        sb.append(iter.next());
-      }
-    } else {
-      sb = new StringBuilder("Missing user information.");
-    }
-
-    return sb.toString();
+  public static String createCmdForRoleDeleteUser(String roleName, String users) {
+    return createCmdForRoleGrant(roleName, users, false, false);
   }
 
   public static String createCmdForGrantPrivilege(

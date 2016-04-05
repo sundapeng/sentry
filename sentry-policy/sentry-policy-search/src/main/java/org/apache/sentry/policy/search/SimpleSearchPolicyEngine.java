@@ -97,7 +97,7 @@ public class SimpleSearchPolicyEngine implements PolicyEngine {
   }
 
   @Override
-  public boolean isSupportPrivilegeForUser() {
+  public boolean isGrantRoleOnUserSupported() {
     return false;
   }
 

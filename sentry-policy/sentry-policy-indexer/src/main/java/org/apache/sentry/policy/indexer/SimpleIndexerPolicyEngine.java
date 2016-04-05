@@ -97,7 +97,7 @@ public class SimpleIndexerPolicyEngine implements PolicyEngine {
   }
 
   @Override
-  public boolean isSupportPrivilegeForUser() {
+  public boolean isGrantRoleOnUserSupported() {
     return false;
   }
 

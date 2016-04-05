@@ -67,7 +67,7 @@ public class TestGetGroupMapping {
       }
 
       @Override
-      public boolean isSupportPrivilegeForUser() {
+      public boolean isGrantRoleOnUserSupported() {
         return false;
       }
 

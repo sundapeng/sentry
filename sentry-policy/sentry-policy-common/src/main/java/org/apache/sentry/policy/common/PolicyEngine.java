@@ -94,7 +94,12 @@ public interface PolicyEngine {
   ImmutableSet<String> getPrivileges(Set<String> groups, Set<String> users, ActiveRoleSet roleSet,
       Authorizable... authorizableHierarchy) throws SentryConfigurationException;
 
-  boolean isSupportPrivilegeForUser();
+  /**
+   * Returns whether grant role on user is supported.
+   *
+   * @return true if role is supported to be granted on user
+   */
+  boolean isGrantRoleOnUserSupported();
 
   void close();
 

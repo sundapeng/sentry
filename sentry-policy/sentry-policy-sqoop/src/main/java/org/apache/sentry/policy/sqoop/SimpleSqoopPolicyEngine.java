@@ -83,7 +83,7 @@ public class SimpleSqoopPolicyEngine implements PolicyEngine {
   }
 
   @Override
-  public boolean isSupportPrivilegeForUser() {
+  public boolean isGrantRoleOnUserSupported() {
     return false;
   }
 

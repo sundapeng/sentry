@@ -1279,6 +1279,9 @@ public class SentryStore {
 
   public Set<String> getRoleNamesForGroups(Set<String> groups) {
     Set<String> result = new HashSet<String>();
+    if (groups == null || groups.isEmpty()) {
+      return result;
+    }
     boolean rollbackTransaction = true;
     PersistenceManager pm = null;
     try {
@@ -1287,13 +1290,11 @@ public class SentryStore {
       query.setFilter("this.groupName == t");
       query.declareParameters("java.lang.String t");
       query.setUnique(true);
-      if (groups != null) {
-        for (String group : groups) {
-          MSentryGroup sentryGroup = (MSentryGroup) query.execute(group.trim());
-          if (sentryGroup != null) {
-            for (MSentryRole role : sentryGroup.getRoles()) {
-              result.add(role.getRoleName());
-            }
+      for (String group : groups) {
+        MSentryGroup sentryGroup = (MSentryGroup) query.execute(group.trim());
+        if (sentryGroup != null) {
+          for (MSentryRole role : sentryGroup.getRoles()) {
+            result.add(role.getRoleName());
           }
         }
       }
@@ -1309,6 +1310,9 @@ public class SentryStore {
 
   public Set<String> getRoleNamesForUsers(Set<String> users) {
     Set<String> result = new HashSet<String>();
+    if (users == null || users.isEmpty()) {
+      return result;
+    }
     boolean rollbackTransaction = true;
     PersistenceManager pm = null;
     try {
@@ -1317,13 +1321,11 @@ public class SentryStore {
       query.setFilter("this.userName == t");
       query.declareParameters("java.lang.String t");
       query.setUnique(true);
-      if (users != null) {
-        for (String user : users) {
-          MSentryUser sentryUser = (MSentryUser) query.execute(user.trim());
-          if (sentryUser != null) {
-            for (MSentryRole role : sentryUser.getRoles()) {
-              result.add(role.getRoleName());
-            }
+      for (String user : users) {
+        MSentryUser sentryUser = (MSentryUser) query.execute(user.trim());
+        if (sentryUser != null) {
+          for (MSentryRole role : sentryUser.getRoles()) {
+            result.add(role.getRoleName());
           }
         }
       }
@@ -1337,7 +1339,7 @@ public class SentryStore {
     }
   }
 
-  public Set<TSentryRole> getTSentryRolesForUser(Set<String> groups, Set<String> users) {
+  public Set<TSentryRole> getTSentryRolesByUserGroups(Set<String> groups, Set<String> users) {
     Set<MSentryRole> mSentryRoles = new HashSet<MSentryRole>();
     Set<TSentryRole> result = new HashSet<TSentryRole>();
     boolean rollbackTransaction = true;
@@ -1347,8 +1349,8 @@ public class SentryStore {
       mSentryRoles.addAll(getRolesForGroups(pm, groups));
       mSentryRoles.addAll(getRolesForUsers(pm, users));
       rollbackTransaction = false;
-      result = convertToTSentryRoles(mSentryRoles);
       commitTransaction(pm);
+      result = convertToTSentryRoles(mSentryRoles);
       return result;
     } finally {
       if (rollbackTransaction) {

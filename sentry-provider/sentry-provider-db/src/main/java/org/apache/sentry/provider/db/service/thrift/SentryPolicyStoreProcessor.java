@@ -697,7 +697,7 @@ public class SentryPolicyStoreProcessor implements SentryPolicyService.Iface {
       if (!isAdmin && !userName.equals(requestor)) {
         throw new SentryAccessDeniedException("Access denied to list the roles for " + userName);
       }
-      roleSet = sentryStore.getTSentryRolesForUser(userGroups, Sets.newHashSet(userName));
+      roleSet = sentryStore.getTSentryRolesByUserGroups(userGroups, Sets.newHashSet(userName));
       response.setRoles(roleSet);
       response.setStatus(Status.OK());
     } catch (SentryGroupNotFoundException e) {

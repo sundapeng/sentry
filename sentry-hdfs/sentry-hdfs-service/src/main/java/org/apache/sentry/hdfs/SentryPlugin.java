@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
+import com.codahale.metrics.Timer;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.sentry.hdfs.ServiceConstants.ServerConfig;
 import org.apache.sentry.hdfs.UpdateForwarder.ExternalImageRetriever;
@@ -44,8 +45,6 @@ import org.apache.sentry.provider.db.service.thrift.TSentryGroup;
 import org.apache.sentry.provider.db.service.thrift.TSentryPrivilege;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.codahale.metrics.Timer;
 
 public class SentryPlugin implements SentryPolicyStorePlugin {
 

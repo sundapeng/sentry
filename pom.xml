@@ -843,18 +843,6 @@ limitations under the License.
           <artifactId>build-helper-maven-plugin</artifactId>
           <version>${build.helper.maven.plugin.version}</version>
         </plugin>
-        <plugin>
-          <groupId>org.datanucleus</groupId>
-          <artifactId>datanucleus-maven-plugin</artifactId>
-          <version>${datanucleus.maven.plugin.version}</version>
-          <dependencies>
-            <dependency>
-              <groupId>org.datanucleus</groupId>
-              <artifactId>datanucleus-core</artifactId>
-              <version>${datanucleus-core.version}</version>
-            </dependency>
-          </dependencies>
-        </plugin>
       </plugins>
     </pluginManagement>
   </build>

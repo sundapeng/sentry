@@ -85,20 +85,20 @@ public class SimpleSearchPolicyEngine implements PolicyEngine {
   @Override
   public ImmutableSet<String> getAllPrivileges(Set<String> groups, Set<String> users,
       ActiveRoleSet roleSet) throws SentryConfigurationException {
-    throw new SentryConfigurationException(
-        "SimpleSearchPolicyEngine doesn't support getAllUGPrivileges!");
+    return getPrivileges(groups, users, roleSet);
   }
 
   @Override
   public ImmutableSet<String> getPrivileges(Set<String> groups, Set<String> users,
       ActiveRoleSet roleSet, Authorizable... authorizationHierarchy) {
-    throw new SentryConfigurationException(
-        "SimpleSearchPolicyEngine doesn't support getUGPrivileges!");
-  }
-
-  @Override
-  public boolean isGrantRoleOnUserSupported() {
-    return false;
+    if (LOGGER.isDebugEnabled()) {
+      LOGGER.debug("Getting permissions for {}", groups);
+    }
+    ImmutableSet<String> result = providerBackend.getPrivileges(groups, users, roleSet);
+    if (LOGGER.isDebugEnabled()) {
+      LOGGER.debug("result = " + result);
+    }
+    return result;
   }
 
   @Override

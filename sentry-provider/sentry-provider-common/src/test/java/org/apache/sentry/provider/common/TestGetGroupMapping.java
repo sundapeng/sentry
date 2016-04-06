@@ -53,7 +53,7 @@ public class TestGetGroupMapping {
       @Override
       public ImmutableSet<String> getAllPrivileges(Set<String> groups,
           ActiveRoleSet roleSet) throws SentryConfigurationException {
-        return getPrivileges(groups, roleSet, null);
+        return getPrivileges(groups, roleSet);
       }
 
       @Override
@@ -67,14 +67,9 @@ public class TestGetGroupMapping {
       }
 
       @Override
-      public boolean isGrantRoleOnUserSupported() {
-        return false;
-      }
-
-      @Override
       public ImmutableSet<String> getAllPrivileges(Set<String> groups, Set<String> users,
           ActiveRoleSet roleSet) throws SentryConfigurationException {
-        return ImmutableSet.of();
+        return getPrivileges(groups, users, roleSet);
       }
 
       @Override

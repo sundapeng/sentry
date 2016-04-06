@@ -94,7 +94,7 @@ struct TAlterSentryRoleAddUsersRequest {
 1: required i32 protocol_version = sentry_common_service.TSENTRY_SERVICE_V1,
 2: required string requestorUserName, # user on whose behalf the request is issued
 3: required string roleName,
-5: required set<string> users
+4: required set<string> users
 }
 
 struct TAlterSentryRoleAddUsersResponse {
@@ -106,13 +106,13 @@ struct TAlterSentryRoleDeleteGroupsRequest {
 1: required i32 protocol_version = sentry_common_service.TSENTRY_SERVICE_V2,
 2: required string requestorUserName, # user on whose behalf the request is issued
 3: required string roleName,
-5: required set<TSentryGroup> groups
+4: required set<TSentryGroup> groups
 }
 struct TAlterSentryRoleDeleteGroupsResponse {
 1: required sentry_common_service.TSentryResponseStatus status
 }
 
-# REVOLE ROLE r1 FROM USER u1
+# REVOKE ROLE r1 FROM USER u1
 struct TAlterSentryRoleDeleteUsersRequest {
 1: required i32 protocol_version = sentry_common_service.TSENTRY_SERVICE_V1,
 2: required string requestorUserName, # user on whose behalf the request is issued

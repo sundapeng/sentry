@@ -68,7 +68,7 @@ public class SimpleDBPolicyEngine implements PolicyEngine {
   @Override
   public ImmutableSet<String> getAllPrivileges(Set<String> groups, Set<String> users,
       ActiveRoleSet roleSet) throws SentryConfigurationException {
-    return getPrivileges(groups, users, roleSet, null);
+    return getPrivileges(groups, users, roleSet);
   }
 
   /**
@@ -100,11 +100,6 @@ public class SimpleDBPolicyEngine implements PolicyEngine {
       LOGGER.debug("result = " + result);
     }
     return result;
-  }
-
-  @Override
-  public boolean isGrantRoleOnUserSupported() {
-    return true;
   }
 
   @Override

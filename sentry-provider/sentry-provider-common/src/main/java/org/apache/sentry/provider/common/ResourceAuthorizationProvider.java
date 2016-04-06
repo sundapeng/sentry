@@ -127,12 +127,7 @@ public abstract class ResourceAuthorizationProvider implements AuthorizationProv
 
   private Iterable<Privilege> getPrivileges(Set<String> groups, Set<String> users,
       ActiveRoleSet roleSet, Authorizable[] authorizables) {
-    ImmutableSet<String> privileges;
-    if (policy.isGrantRoleOnUserSupported()) {
-      privileges = policy.getPrivileges(groups, users, roleSet, authorizables);
-    } else {
-      privileges = policy.getPrivileges(groups, roleSet, authorizables);
-    }
+    ImmutableSet<String> privileges = policy.getPrivileges(groups, users, roleSet, authorizables);
     return Iterables.transform(appendDefaultDBPriv(privileges, authorizables),
         new Function<String, Privilege>() {
       @Override
@@ -182,13 +177,8 @@ public abstract class ResourceAuthorizationProvider implements AuthorizationProv
   @Override
   public Set<String> listPrivilegesForSubject(Subject subject) throws SentryConfigurationException {
     Set<String> result = Sets.newHashSet();
-    if (policy.isGrantRoleOnUserSupported()) {
-      result = policy.getPrivileges(getGroups(subject), Sets.newHashSet(subject.getName()),
-          ActiveRoleSet.ALL, (Authorizable[]) null);
-    } else {
-      result = policy.getPrivileges(getGroups(subject), ActiveRoleSet.ALL, (Authorizable[]) null);
-    }
-
+    result = policy.getPrivileges(getGroups(subject), Sets.newHashSet(subject.getName()),
+        ActiveRoleSet.ALL, (Authorizable[]) null);
     return result;
   }
 

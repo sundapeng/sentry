@@ -70,8 +70,7 @@ public class SimpleIndexerPolicyEngine implements PolicyEngine {
   @Override
   public ImmutableSet<String> getAllPrivileges(Set<String> groups, Set<String> users,
       ActiveRoleSet roleSet) throws SentryConfigurationException {
-    throw new SentryConfigurationException(
-        "SimpleIndexerPolicyEngine doesn't support getAllPrivileges!");
+    return getPrivileges(groups, users, roleSet);
   }
 
   /**
@@ -92,13 +91,14 @@ public class SimpleIndexerPolicyEngine implements PolicyEngine {
   @Override
   public ImmutableSet<String> getPrivileges(Set<String> groups, Set<String> users,
       ActiveRoleSet roleSet, Authorizable... authorizationHierarchy) {
-    throw new SentryConfigurationException(
-        "SimpleIndexerPolicyEngine doesn't support getPrivileges!");
-  }
-
-  @Override
-  public boolean isGrantRoleOnUserSupported() {
-    return false;
+    if(LOGGER.isDebugEnabled()) {
+      LOGGER.debug("Getting permissions for {}", groups);
+    }
+    ImmutableSet<String> result = providerBackend.getPrivileges(groups, users, roleSet);
+    if(LOGGER.isDebugEnabled()) {
+      LOGGER.debug("result = " + result);
+    }
+    return result;
   }
 
   @Override

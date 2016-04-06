@@ -50,7 +50,7 @@ public class TListSentryPrivilegesForProviderRequest implements org.apache.thrif
   private Set<String> groups; // required
   private TSentryActiveRoleSet roleSet; // required
   private TSentryAuthorizable authorizableHierarchy; // optional
-  private Set<String> users; // required
+  private Set<String> users; // optional
 
   /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
   public enum _Fields implements org.apache.thrift.TFieldIdEnum {
@@ -125,7 +125,7 @@ public class TListSentryPrivilegesForProviderRequest implements org.apache.thrif
   // isset id assignments
   private static final int __PROTOCOL_VERSION_ISSET_ID = 0;
   private byte __isset_bitfield = 0;
-  private _Fields optionals[] = {_Fields.AUTHORIZABLE_HIERARCHY};
+  private _Fields optionals[] = {_Fields.AUTHORIZABLE_HIERARCHY,_Fields.USERS};
   public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
   static {
     Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
@@ -138,7 +138,7 @@ public class TListSentryPrivilegesForProviderRequest implements org.apache.thrif
         new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, TSentryActiveRoleSet.class)));
     tmpMap.put(_Fields.AUTHORIZABLE_HIERARCHY, new org.apache.thrift.meta_data.FieldMetaData("authorizableHierarchy", org.apache.thrift.TFieldRequirementType.OPTIONAL, 
         new org.apache.thrift.meta_data.StructMetaData(org.apache.thrift.protocol.TType.STRUCT, TSentryAuthorizable.class)));
-    tmpMap.put(_Fields.USERS, new org.apache.thrift.meta_data.FieldMetaData("users", org.apache.thrift.TFieldRequirementType.REQUIRED, 
+    tmpMap.put(_Fields.USERS, new org.apache.thrift.meta_data.FieldMetaData("users", org.apache.thrift.TFieldRequirementType.OPTIONAL, 
         new org.apache.thrift.meta_data.SetMetaData(org.apache.thrift.protocol.TType.SET, 
             new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.STRING))));
     metaDataMap = Collections.unmodifiableMap(tmpMap);
@@ -153,15 +153,13 @@ public class TListSentryPrivilegesForProviderRequest implements org.apache.thrif
   public TListSentryPrivilegesForProviderRequest(
     int protocol_version,
     Set<String> groups,
-    TSentryActiveRoleSet roleSet,
-    Set<String> users)
+    TSentryActiveRoleSet roleSet)
   {
     this();
     this.protocol_version = protocol_version;
     setProtocol_versionIsSet(true);
     this.groups = groups;
     this.roleSet = roleSet;
-    this.users = users;
   }
 
   /**
@@ -637,14 +635,16 @@ public class TListSentryPrivilegesForProviderRequest implements org.apache.thrif
       }
       first = false;
     }
-    if (!first) sb.append(", ");
-    sb.append("users:");
-    if (this.users == null) {
-      sb.append("null");
-    } else {
-      sb.append(this.users);
+    if (isSetUsers()) {
+      if (!first) sb.append(", ");
+      sb.append("users:");
+      if (this.users == null) {
+        sb.append("null");
+      } else {
+        sb.append(this.users);
+      }
+      first = false;
     }
-    first = false;
     sb.append(")");
     return sb.toString();
   }
@@ -661,10 +661,6 @@ public class TListSentryPrivilegesForProviderRequest implements org.apache.thrif
 
     if (!isSetRoleSet()) {
       throw new org.apache.thrift.protocol.TProtocolException("Required field 'roleSet' is unset! Struct:" + toString());
-    }
-
-    if (!isSetUsers()) {
-      throw new org.apache.thrift.protocol.TProtocolException("Required field 'users' is unset! Struct:" + toString());
     }
 
     // check for sub-struct validity
@@ -815,16 +811,18 @@ public class TListSentryPrivilegesForProviderRequest implements org.apache.thrif
         }
       }
       if (struct.users != null) {
-        oprot.writeFieldBegin(USERS_FIELD_DESC);
-        {
-          oprot.writeSetBegin(new org.apache.thrift.protocol.TSet(org.apache.thrift.protocol.TType.STRING, struct.users.size()));
-          for (String _iter95 : struct.users)
+        if (struct.isSetUsers()) {
+          oprot.writeFieldBegin(USERS_FIELD_DESC);
           {
-            oprot.writeString(_iter95);
+            oprot.writeSetBegin(new org.apache.thrift.protocol.TSet(org.apache.thrift.protocol.TType.STRING, struct.users.size()));
+            for (String _iter95 : struct.users)
+            {
+              oprot.writeString(_iter95);
+            }
+            oprot.writeSetEnd();
           }
-          oprot.writeSetEnd();
+          oprot.writeFieldEnd();
         }
-        oprot.writeFieldEnd();
       }
       oprot.writeFieldStop();
       oprot.writeStructEnd();
@@ -852,20 +850,25 @@ public class TListSentryPrivilegesForProviderRequest implements org.apache.thrif
         }
       }
       struct.roleSet.write(oprot);
-      {
-        oprot.writeI32(struct.users.size());
-        for (String _iter97 : struct.users)
-        {
-          oprot.writeString(_iter97);
-        }
-      }
       BitSet optionals = new BitSet();
       if (struct.isSetAuthorizableHierarchy()) {
         optionals.set(0);
       }
-      oprot.writeBitSet(optionals, 1);
+      if (struct.isSetUsers()) {
+        optionals.set(1);
+      }
+      oprot.writeBitSet(optionals, 2);
       if (struct.isSetAuthorizableHierarchy()) {
         struct.authorizableHierarchy.write(oprot);
+      }
+      if (struct.isSetUsers()) {
+        {
+          oprot.writeI32(struct.users.size());
+          for (String _iter97 : struct.users)
+          {
+            oprot.writeString(_iter97);
+          }
+        }
       }
     }
 
@@ -888,22 +891,24 @@ public class TListSentryPrivilegesForProviderRequest implements org.apache.thrif
       struct.roleSet = new TSentryActiveRoleSet();
       struct.roleSet.read(iprot);
       struct.setRoleSetIsSet(true);
-      {
-        org.apache.thrift.protocol.TSet _set101 = new org.apache.thrift.protocol.TSet(org.apache.thrift.protocol.TType.STRING, iprot.readI32());
-        struct.users = new HashSet<String>(2*_set101.size);
-        for (int _i102 = 0; _i102 < _set101.size; ++_i102)
-        {
-          String _elem103; // required
-          _elem103 = iprot.readString();
-          struct.users.add(_elem103);
-        }
-      }
-      struct.setUsersIsSet(true);
-      BitSet incoming = iprot.readBitSet(1);
+      BitSet incoming = iprot.readBitSet(2);
       if (incoming.get(0)) {
         struct.authorizableHierarchy = new TSentryAuthorizable();
         struct.authorizableHierarchy.read(iprot);
         struct.setAuthorizableHierarchyIsSet(true);
+      }
+      if (incoming.get(1)) {
+        {
+          org.apache.thrift.protocol.TSet _set101 = new org.apache.thrift.protocol.TSet(org.apache.thrift.protocol.TType.STRING, iprot.readI32());
+          struct.users = new HashSet<String>(2*_set101.size);
+          for (int _i102 = 0; _i102 < _set101.size; ++_i102)
+          {
+            String _elem103; // required
+            _elem103 = iprot.readString();
+            struct.users.add(_elem103);
+          }
+        }
+        struct.setUsersIsSet(true);
       }
     }
   }

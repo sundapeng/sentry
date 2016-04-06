@@ -699,11 +699,14 @@ public class SentryPolicyServiceClientDefaultImpl implements SentryPolicyService
     TSentryActiveRoleSet thriftRoleSet = new TSentryActiveRoleSet(roleSet.isAll(), roleSet.getRoles());
     TListSentryPrivilegesForProviderRequest request =
         new TListSentryPrivilegesForProviderRequest(ThriftConstants.
-            TSENTRY_SERVICE_VERSION_CURRENT, groups, thriftRoleSet, users);
+            TSENTRY_SERVICE_VERSION_CURRENT, groups, thriftRoleSet);
     if (authorizable != null && authorizable.length > 0) {
       TSentryAuthorizable tSentryAuthorizable = setupSentryAuthorizable(Lists
           .newArrayList(authorizable));
       request.setAuthorizableHierarchy(tSentryAuthorizable);
+    }
+    if (users != null) {
+      request.setUsers(users);
     }
     try {
       TListSentryPrivilegesForProviderResponse response = client.list_sentry_privileges_for_provider(request);

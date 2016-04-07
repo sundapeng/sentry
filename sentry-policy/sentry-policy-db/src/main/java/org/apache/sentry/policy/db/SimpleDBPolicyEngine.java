@@ -92,7 +92,7 @@ public class SimpleDBPolicyEngine implements PolicyEngine {
       ActiveRoleSet roleSet, Authorizable... authorizableHierarchy)
       throws SentryConfigurationException {
     if (LOGGER.isDebugEnabled()) {
-      LOGGER.debug("Getting permissions for {},{}", groups, users);
+      LOGGER.debug("Getting permissions for groups: {}, users: {}", groups, users);
     }
     ImmutableSet<String> result = providerBackend.getPrivileges(groups, users, roleSet,
         authorizableHierarchy);

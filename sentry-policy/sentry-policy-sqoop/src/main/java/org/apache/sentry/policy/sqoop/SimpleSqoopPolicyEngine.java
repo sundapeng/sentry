@@ -78,7 +78,7 @@ public class SimpleSqoopPolicyEngine implements PolicyEngine {
   public ImmutableSet<String> getPrivileges(Set<String> groups, Set<String> users,
       ActiveRoleSet roleSet, Authorizable... authorizationHierarchy) {
     if(LOGGER.isDebugEnabled()) {
-      LOGGER.debug("Getting permissions for {},{}", groups, users);
+      LOGGER.debug("Getting permissions for groups: {}, users: {}", groups, users);
     }
     ImmutableSet<String> result = providerBackend.getPrivileges(groups, users, roleSet);
     if(LOGGER.isDebugEnabled()) {

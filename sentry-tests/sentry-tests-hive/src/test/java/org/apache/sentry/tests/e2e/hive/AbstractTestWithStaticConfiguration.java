@@ -257,7 +257,7 @@ public abstract class AbstractTestWithStaticConfiguration {
     PolicyFile policyFile = PolicyFile.setAdminOnServer1(ADMIN1)
         .setUserGroupMapping(StaticUserGroup.getStaticMapping());
     if (usersToGroups.size() > 0) {
-      policyFile.appendUserGroupsMappings(usersToGroups);
+      policyFile.setUserGroupMapping(usersToGroups);
     }
     policyFile.write(policyFileLocation);
 

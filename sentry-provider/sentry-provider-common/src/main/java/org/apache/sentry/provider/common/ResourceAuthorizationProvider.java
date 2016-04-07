@@ -176,10 +176,8 @@ public abstract class ResourceAuthorizationProvider implements AuthorizationProv
 
   @Override
   public Set<String> listPrivilegesForSubject(Subject subject) throws SentryConfigurationException {
-    Set<String> result = Sets.newHashSet();
-    result = policy.getPrivileges(getGroups(subject), Sets.newHashSet(subject.getName()),
+    return policy.getPrivileges(getGroups(subject), Sets.newHashSet(subject.getName()),
         ActiveRoleSet.ALL, (Authorizable[]) null);
-    return result;
   }
 
   @Override

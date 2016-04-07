@@ -63,6 +63,7 @@ public class TestSentryServerWithoutKerberos extends SentryServiceIntegrationBas
   public void testQueryPushDown() throws Exception {
     String requestorUserName = ADMIN_USER;
     Set<String> requestorUserGroupNames = Sets.newHashSet(ADMIN_GROUP);
+    Set<String> requestorUserNames = Sets.newHashSet(ADMIN_USER);
     setLocalGroupMapping(requestorUserName, requestorUserGroupNames);
     writePolicyFile();
 
@@ -110,18 +111,18 @@ public class TestSentryServerWithoutKerberos extends SentryServiceIntegrationBas
     listPrivilegesByRoleName = client.listPrivilegesByRoleName(requestorUserName, roleName2, Lists.newArrayList(new Server("server"), new Database("db3")));
     assertEquals("Privilege not assigned to role2 !!", 1, listPrivilegesByRoleName.size());
 
-    Set<String> listPrivilegesForProvider = client.listPrivilegesForProvider(Sets.newHashSet(group1, group2), new HashSet<String>(), ActiveRoleSet.ALL, new Server("server"), new Database("db2"));
+    Set<String> listPrivilegesForProvider = client.listPrivilegesForProvider(Sets.newHashSet(group1, group2), requestorUserNames, ActiveRoleSet.ALL, new Server("server"), new Database("db2"));
     assertEquals("Privilege not correctly assigned to roles !!",
         Sets.newHashSet("server=server->db=db2->table=table4->action=all", "server=server->db=db2->table=table3->action=all"),
         listPrivilegesForProvider);
 
-    listPrivilegesForProvider = client.listPrivilegesForProvider(Sets.newHashSet(group1, group2), new HashSet<String>(), ActiveRoleSet.ALL, new Server("server"), new Database("db3"));
+    listPrivilegesForProvider = client.listPrivilegesForProvider(Sets.newHashSet(group1, group2), requestorUserNames, ActiveRoleSet.ALL, new Server("server"), new Database("db3"));
     assertEquals("Privilege not correctly assigned to roles !!", Sets.newHashSet("server=server->db=db3->table=table5->action=all"), listPrivilegesForProvider);
 
-    listPrivilegesForProvider = client.listPrivilegesForProvider(Sets.newHashSet(group1, group2), new HashSet<String>(), new ActiveRoleSet(Sets.newHashSet(roleName1)), new Server("server"), new Database("db3"));
+    listPrivilegesForProvider = client.listPrivilegesForProvider(Sets.newHashSet(group1, group2), requestorUserNames, new ActiveRoleSet(Sets.newHashSet(roleName1)), new Server("server"), new Database("db3"));
     assertEquals("Privilege not correctly assigned to roles !!", Sets.newHashSet("server=+"), listPrivilegesForProvider);
 
-    listPrivilegesForProvider = client.listPrivilegesForProvider(Sets.newHashSet(group1, group2), new HashSet<String>(), new ActiveRoleSet(Sets.newHashSet(roleName1)), new Server("server1"));
+    listPrivilegesForProvider = client.listPrivilegesForProvider(Sets.newHashSet(group1, group2), requestorUserNames, new ActiveRoleSet(Sets.newHashSet(roleName1)), new Server("server1"));
     assertEquals("Privilege not correctly assigned to roles !!", new HashSet<String>(), listPrivilegesForProvider);
   }
 
@@ -137,7 +138,7 @@ public class TestSentryServerWithoutKerberos extends SentryServiceIntegrationBas
   public void testDropRole() throws Exception {
     String requestorUserName = ADMIN_USER;
     Set<String> requestorUserGroupNames = Sets.newHashSet(ADMIN_GROUP);
-    Set<String> requestorUserNames = Sets.newHashSet();
+    Set<String> requestorUserNames = Sets.newHashSet(ADMIN_USER);
     setLocalGroupMapping(requestorUserName, requestorUserGroupNames);
     writePolicyFile();
     String roleName = "admin_r";

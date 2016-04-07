@@ -37,7 +37,7 @@ public class TAlterSentryRoleDeleteGroupsRequest implements org.apache.thrift.TB
   private static final org.apache.thrift.protocol.TField PROTOCOL_VERSION_FIELD_DESC = new org.apache.thrift.protocol.TField("protocol_version", org.apache.thrift.protocol.TType.I32, (short)1);
   private static final org.apache.thrift.protocol.TField REQUESTOR_USER_NAME_FIELD_DESC = new org.apache.thrift.protocol.TField("requestorUserName", org.apache.thrift.protocol.TType.STRING, (short)2);
   private static final org.apache.thrift.protocol.TField ROLE_NAME_FIELD_DESC = new org.apache.thrift.protocol.TField("roleName", org.apache.thrift.protocol.TType.STRING, (short)3);
-  private static final org.apache.thrift.protocol.TField GROUPS_FIELD_DESC = new org.apache.thrift.protocol.TField("groups", org.apache.thrift.protocol.TType.SET, (short)4);
+  private static final org.apache.thrift.protocol.TField GROUPS_FIELD_DESC = new org.apache.thrift.protocol.TField("groups", org.apache.thrift.protocol.TType.SET, (short)5);
 
   private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
   static {
@@ -55,7 +55,7 @@ public class TAlterSentryRoleDeleteGroupsRequest implements org.apache.thrift.TB
     PROTOCOL_VERSION((short)1, "protocol_version"),
     REQUESTOR_USER_NAME((short)2, "requestorUserName"),
     ROLE_NAME((short)3, "roleName"),
-    GROUPS((short)4, "groups");
+    GROUPS((short)5, "groups");
 
     private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
 
@@ -76,7 +76,7 @@ public class TAlterSentryRoleDeleteGroupsRequest implements org.apache.thrift.TB
           return REQUESTOR_USER_NAME;
         case 3: // ROLE_NAME
           return ROLE_NAME;
-        case 4: // GROUPS
+        case 5: // GROUPS
           return GROUPS;
         default:
           return null;
@@ -628,7 +628,7 @@ public class TAlterSentryRoleDeleteGroupsRequest implements org.apache.thrift.TB
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
             }
             break;
-          case 4: // GROUPS
+          case 5: // GROUPS
             if (schemeField.type == org.apache.thrift.protocol.TType.SET) {
               {
                 org.apache.thrift.protocol.TSet _set16 = iprot.readSetBegin();

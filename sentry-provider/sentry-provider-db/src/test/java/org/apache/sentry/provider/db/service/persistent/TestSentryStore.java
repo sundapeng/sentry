@@ -1466,7 +1466,7 @@ public class TestSentryStore extends org.junit.Assert {
     assertEquals(Sets.newHashSet("server=server1->db=db1->table=tbl1->action=select",
         "server=server1"), SentryStore.toTrimedLower(sentryStore
         .listAllSentryPrivilegesForProvider(Sets.newHashSet(groupName1, groupName2),
-            Sets.newHashSet(""),
+            null,
             new TSentryActiveRoleSet(true, new HashSet<String>()))));
     // both users and groups, all active roles
     assertEquals(Sets.newHashSet("server=server1->db=db1->table=tbl1->action=select",
@@ -1477,22 +1477,19 @@ public class TestSentryStore extends org.junit.Assert {
     // one active role
     assertEquals(Sets.newHashSet("server=server1->db=db1->table=tbl1->action=select"),
         SentryStore.toTrimedLower(sentryStore.listAllSentryPrivilegesForProvider(Sets.newHashSet(
-            groupName1, groupName2), Sets.newHashSet(""),
+            groupName1, groupName2), null,
             new TSentryActiveRoleSet(false, Sets.newHashSet(roleName1)))));
     assertEquals(Sets.newHashSet("server=server1->db=db1->table=tbl1->action=select",
         "server=server1"), SentryStore.toTrimedLower(sentryStore
-        .listAllSentryPrivilegesForProvider(Sets.newHashSet(groupName1, groupName2),
-            Sets.newHashSet(""),
+        .listAllSentryPrivilegesForProvider(Sets.newHashSet(groupName1, groupName2), null,
             new TSentryActiveRoleSet(false, Sets.newHashSet(roleName2)))));
     // unknown active role
     assertEquals(Sets.newHashSet(), SentryStore.toTrimedLower(sentryStore
-        .listAllSentryPrivilegesForProvider(Sets.newHashSet(groupName1, groupName2),
-            Sets.newHashSet(""),
+        .listAllSentryPrivilegesForProvider(Sets.newHashSet(groupName1, groupName2), null,
             new TSentryActiveRoleSet(false, Sets.newHashSet("not a role")))));
     // no active roles
     assertEquals(Sets.newHashSet(), SentryStore.toTrimedLower(sentryStore
-        .listAllSentryPrivilegesForProvider(Sets.newHashSet(groupName1, groupName2),
-            Sets.newHashSet(""),
+        .listAllSentryPrivilegesForProvider(Sets.newHashSet(groupName1, groupName2), null,
             new TSentryActiveRoleSet(false, new HashSet<String>()))));
   }
 
@@ -2013,7 +2010,7 @@ public class TestSentryStore extends org.junit.Assert {
     TSentryActiveRoleSet thriftRoleSet = new TSentryActiveRoleSet(true, new HashSet<String>(Arrays.asList(roleName)));
 
     Set<String> privs =
-        sentryStore.listSentryPrivilegesForProvider(new HashSet<String>(Arrays.asList("group1")), new HashSet<String>(),
+        sentryStore.listSentryPrivilegesForProvider(new HashSet<String>(Arrays.asList("group1")), null,
                 thriftRoleSet, tSentryAuthorizable);
 
     assertTrue(privs.size()==1);

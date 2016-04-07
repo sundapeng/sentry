@@ -1291,26 +1291,14 @@ public class SentryStore {
   }
 
   public Set<String> getRoleNamesForGroups(Set<String> groups) {
-    Set<String> result = new HashSet<String>();
     if (groups == null || groups.isEmpty()) {
-      return result;
+      return ImmutableSet.of();
     }
     boolean rollbackTransaction = true;
     PersistenceManager pm = null;
     try {
       pm = openTransaction();
-      Query query = pm.newQuery(MSentryGroup.class);
-      query.setFilter("this.groupName == t");
-      query.declareParameters("java.lang.String t");
-      query.setUnique(true);
-      for (String group : groups) {
-        MSentryGroup sentryGroup = (MSentryGroup) query.execute(group.trim());
-        if (sentryGroup != null) {
-          for (MSentryRole role : sentryGroup.getRoles()) {
-            result.add(role.getRoleName());
-          }
-        }
-      }
+      Set<String> result = getRoleNamesForGroupsCore(pm, groups);
       rollbackTransaction = false;
       commitTransaction(pm);
       return result;
@@ -1321,27 +1309,19 @@ public class SentryStore {
     }
   }
 
+  private Set<String> getRoleNamesForGroupsCore(PersistenceManager pm, Set<String> groups) {
+    return convertToRoleNameSet(getRolesForGroups(pm, groups));
+  }
+
   public Set<String> getRoleNamesForUsers(Set<String> users) {
-    Set<String> result = new HashSet<String>();
     if (users == null || users.isEmpty()) {
-      return result;
+      return ImmutableSet.of();
     }
     boolean rollbackTransaction = true;
     PersistenceManager pm = null;
     try {
       pm = openTransaction();
-      Query query = pm.newQuery(MSentryUser.class);
-      query.setFilter("this.userName == t");
-      query.declareParameters("java.lang.String t");
-      query.setUnique(true);
-      for (String user : users) {
-        MSentryUser sentryUser = (MSentryUser) query.execute(user.trim());
-        if (sentryUser != null) {
-          for (MSentryRole role : sentryUser.getRoles()) {
-            result.add(role.getRoleName());
-          }
-        }
-      }
+      Set<String> result = getRoleNamesForUsersCore(pm,users);
       rollbackTransaction = false;
       commitTransaction(pm);
       return result;
@@ -1350,6 +1330,10 @@ public class SentryStore {
         rollbackTransaction(pm);
       }
     }
+  }
+
+  private Set<String> getRoleNamesForUsersCore(PersistenceManager pm, Set<String> users) {
+    return convertToRoleNameSet(getRolesForUsers(pm, users));
   }
 
   public Set<TSentryRole> getTSentryRolesByUserGroups(Set<String> groups, Set<String> users) {
@@ -1373,12 +1357,12 @@ public class SentryStore {
   }
 
   public Set<MSentryRole> getRolesForGroups(PersistenceManager pm, Set<String> groups) {
-    Set<MSentryRole> result = new HashSet<MSentryRole>();
-    Query query = pm.newQuery(MSentryGroup.class);
-    query.setFilter("this.groupName == t");
-    query.declareParameters("java.lang.String t");
-    query.setUnique(true);
+    Set<MSentryRole> result = Sets.newHashSet();
     if (groups != null) {
+      Query query = pm.newQuery(MSentryGroup.class);
+      query.setFilter("this.groupName == t");
+      query.declareParameters("java.lang.String t");
+      query.setUnique(true);
       for (String group : groups) {
         MSentryGroup sentryGroup = (MSentryGroup) query.execute(group.trim());
         if (sentryGroup != null) {
@@ -1390,12 +1374,12 @@ public class SentryStore {
   }
 
   public Set<MSentryRole> getRolesForUsers(PersistenceManager pm, Set<String> users) {
-    Set<MSentryRole> result = new HashSet<MSentryRole>();
-    Query query = pm.newQuery(MSentryUser.class);
-    query.setFilter("this.userName == t");
-    query.declareParameters("java.lang.String t");
-    query.setUnique(true);
+    Set<MSentryRole> result = Sets.newHashSet();
     if (users != null) {
+      Query query = pm.newQuery(MSentryUser.class);
+      query.setFilter("this.userName == t");
+      query.declareParameters("java.lang.String t");
+      query.setUnique(true);
       for (String user : users) {
         MSentryUser sentryUser = (MSentryUser) query.execute(user.trim());
         if (sentryUser != null) {
@@ -1435,12 +1419,22 @@ public class SentryStore {
     Set<String> activeRoleNames = toTrimedLower(roleSet.getRoles());
 
     Set<String> roleNames = Sets.newHashSet();
-    roleNames.addAll(toTrimedLower(getRoleNamesForGroups(groups)));
-    roleNames.addAll(toTrimedLower(getRoleNamesForUsers(users)));
-
-    Set<String> rolesToQuery = roleSet.isAll() ? roleNames : Sets.intersection(activeRoleNames,
-        roleNames);
-    return rolesToQuery;
+    boolean rollbackTransaction = true;
+    PersistenceManager pm = null;
+    try {
+      pm = openTransaction();
+      roleNames.addAll(toTrimedLower(getRoleNamesForGroupsCore(pm, groups)));
+      roleNames.addAll(toTrimedLower(getRoleNamesForUsersCore(pm, users)));
+      rollbackTransaction = false;
+      commitTransaction(pm);
+      Set<String> rolesToQuery = roleSet.isAll() ? roleNames : Sets.intersection(activeRoleNames,
+          roleNames);
+      return rolesToQuery;
+    } finally {
+      if (rollbackTransaction) {
+        rollbackTransaction(pm);
+      }
+    }
   }
 
   @VisibleForTesting
@@ -1508,6 +1502,14 @@ public class SentryStore {
       roles.add(convertToTSentryRole(mSentryRole));
     }
     return roles;
+  }
+
+  private Set<String> convertToRoleNameSet(Set<MSentryRole> mSentryRoles) {
+    Set<String> roleNameSet = Sets.newHashSet();
+    for (MSentryRole role : mSentryRoles) {
+      roleNameSet.add(role.getRoleName());
+    }
+    return roleNameSet;
   }
 
   private TSentryRole convertToTSentryRole(MSentryRole mSentryRole) {

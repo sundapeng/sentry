@@ -1337,17 +1337,16 @@ public class SentryStore {
   }
 
   public Set<TSentryRole> getTSentryRolesByUserGroups(Set<String> groups, Set<String> users) {
-    Set<MSentryRole> mSentryRoles = new HashSet<MSentryRole>();
-    Set<TSentryRole> result = new HashSet<TSentryRole>();
     boolean rollbackTransaction = true;
     PersistenceManager pm = null;
     try {
       pm = openTransaction();
+      Set<MSentryRole> mSentryRoles = new HashSet<MSentryRole>();
       mSentryRoles.addAll(getRolesForGroups(pm, groups));
       mSentryRoles.addAll(getRolesForUsers(pm, users));
       rollbackTransaction = false;
+      Set<TSentryRole> result = convertToTSentryRoles(mSentryRoles);
       commitTransaction(pm);
-      result = convertToTSentryRoles(mSentryRoles);
       return result;
     } finally {
       if (rollbackTransaction) {

@@ -89,6 +89,12 @@ public class PolicyFile {
     LOGGER.warn("Static user:group mapping is not being used");
     return add(usersToGroups.get(userName), allowDuplicates, groupNames);
   }
+  public PolicyFile setUserGroupMapping(Map<String, String> mapping) {
+    for (Entry<String, String> entry : mapping.entrySet()) {
+      usersToGroups.put(entry.getKey(), entry.getValue());
+    }
+    return this;
+  }
   public PolicyFile setUserGroupMapping(Multimap<String, String> mapping) {
     usersToGroups.putAll(mapping);
     return this;

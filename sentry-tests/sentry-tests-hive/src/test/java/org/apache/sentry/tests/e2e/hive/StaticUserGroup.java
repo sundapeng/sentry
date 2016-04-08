@@ -16,8 +16,8 @@
  */
 package org.apache.sentry.tests.e2e.hive;
 
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.Multimap;
+import java.util.HashMap;
+import java.util.Map;
 
 public class StaticUserGroup {
   public static String ADMIN1,ADMINGROUP;
@@ -32,13 +32,13 @@ public class StaticUserGroup {
       USERGROUP2 = "user_group2",
       USERGROUP3 = "user_group3",
       USERGROUP4 = "user_group4";
-  private static final Multimap<String, String> staticMapping;
+  private static final Map<String, String> staticMapping;
 
   static {
 
     ADMIN1 = System.getProperty("sentry.e2etest.admin.user", "admin1");
     ADMINGROUP = System.getProperty("sentry.e2etest.admin.group", "admin");
-    staticMapping = ArrayListMultimap.create();
+    staticMapping = new HashMap<String, String>();
     staticMapping.put(ADMIN1, ADMINGROUP);
     staticMapping.put(HIVE, HIVE);
     staticMapping.put(USER1_1, USERGROUP1);
@@ -48,7 +48,7 @@ public class StaticUserGroup {
     staticMapping.put(USER4_1, USERGROUP4);
   }
 
-  public static Multimap<String, String> getStaticMapping(){
+  public static Map<String, String> getStaticMapping(){
     return staticMapping;
   }
 

@@ -528,8 +528,8 @@ public class SentryPolicyStoreProcessor implements SentryPolicyService.Iface {
     }
 
     try {
-    AUDIT_LOGGER.info(JsonLogEntityFactory.getInstance()
-        .createJsonLogEntity(request, response, conf).toJsonFormatLog());
+      AUDIT_LOGGER.info(JsonLogEntityFactory.getInstance()
+          .createJsonLogEntity(request, response, conf).toJsonFormatLog());
     } catch (Exception e) {
       // if any exception, log the exception.
       String msg = "Error creating audit log for add role to user: " + e.getMessage();
@@ -569,9 +569,9 @@ public class SentryPolicyStoreProcessor implements SentryPolicyService.Iface {
     }
 
     try {
-    AUDIT_LOGGER.info(JsonLogEntityFactory.getInstance()
-        .createJsonLogEntity(request, response, conf).toJsonFormatLog());
-    } catch (Exception e) {
+      AUDIT_LOGGER.info(JsonLogEntityFactory.getInstance()
+          .createJsonLogEntity(request, response, conf).toJsonFormatLog());
+   } catch (Exception e) {
       // if any exception, log the exception.
       String msg = "Error creating audit log for delete role from user: " + e.getMessage();
       LOGGER.error(msg, e);

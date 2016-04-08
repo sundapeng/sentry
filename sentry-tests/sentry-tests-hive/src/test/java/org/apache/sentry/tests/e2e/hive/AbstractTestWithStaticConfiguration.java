@@ -145,7 +145,7 @@ public abstract class AbstractTestWithStaticConfiguration {
   protected static boolean enableSentryHA = false;
   protected static Context context;
   protected final String semanticException = "SemanticException No valid privileges";
-  protected static Multimap<String, String> usersToGroups = ArrayListMultimap.create();
+  protected static Multimap<String, String> additionalUsersToGroups = ArrayListMultimap.create();
 
   protected static boolean clientKerberos = false;
   protected static String REALM = System.getProperty("sentry.service.realm", "EXAMPLE.COM");
@@ -256,8 +256,8 @@ public abstract class AbstractTestWithStaticConfiguration {
 
     PolicyFile policyFile = PolicyFile.setAdminOnServer1(ADMIN1)
         .setUserGroupMapping(StaticUserGroup.getStaticMapping());
-    if (usersToGroups.size() > 0) {
-      policyFile.appendUserGroupMapping(usersToGroups);
+    if (additionalUsersToGroups.size() > 0) {
+      policyFile.appendUserGroupMapping(additionalUsersToGroups);
     }
     policyFile.write(policyFileLocation);
 

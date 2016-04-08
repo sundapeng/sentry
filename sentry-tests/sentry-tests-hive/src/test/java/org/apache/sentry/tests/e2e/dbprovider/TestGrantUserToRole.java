@@ -56,12 +56,12 @@ public class TestGrantUserToRole extends AbstractTestWithStaticConfiguration {
     // user2->group1
     // user3->group1, group2
     // user4->group2, group3
-    usersToGroups.put(USER1, GROUP1);
-    usersToGroups.put(USER2, GROUP1);
-    usersToGroups.put(USER3, GROUP1);
-    usersToGroups.put(USER3, GROUP2);
-    usersToGroups.put(USER4, GROUP2);
-    usersToGroups.put(USER4, GROUP3);
+    additionalUsersToGroups.put(USER1, GROUP1);
+    additionalUsersToGroups.put(USER2, GROUP1);
+    additionalUsersToGroups.put(USER3, GROUP1);
+    additionalUsersToGroups.put(USER3, GROUP2);
+    additionalUsersToGroups.put(USER4, GROUP2);
+    additionalUsersToGroups.put(USER4, GROUP3);
     useSentryService = true;
     AbstractTestWithStaticConfiguration.setupTestStaticConfiguration();
   }

@@ -36,7 +36,7 @@
         <index name="SentryGroupName" unique="true"/>
       </field>
       <field name = "createTime">
-      	<column name = "CREATE_TIME" jdbc-type="BIGINT"/>
+        <column name = "CREATE_TIME" jdbc-type="BIGINT"/>
       </field>
 
       <field name="roles" mapped-by="groups">
@@ -54,7 +54,7 @@
         <index name="SentryUserName" unique="true"/>
       </field>
       <field name = "createTime">
-      	<column name = "CREATE_TIME" jdbc-type="BIGINT"/>
+        <column name = "CREATE_TIME" jdbc-type="BIGINT"/>
       </field>
 
       <field name="roles" mapped-by="users">
@@ -72,7 +72,7 @@
         <index name="SentryRoleName" unique="true"/>
       </field>
       <field name = "createTime">
-      	<column name = "CREATE_TIME" jdbc-type="BIGINT"/>
+        <column name = "CREATE_TIME" jdbc-type="BIGINT"/>
       </field>
       <field name = "privileges" table="SENTRY_ROLE_DB_PRIVILEGE_MAP" default-fetch-group="true">
         <collection element-type="org.apache.sentry.provider.db.service.model.MSentryPrivilege"/>
@@ -119,7 +119,7 @@
       <datastore-identity>
         <column name="DB_PRIVILEGE_ID"/>
       </datastore-identity>
-    <index name="PRIVILEGE_INDEX" unique="true">
+      <index name="PRIVILEGE_INDEX" unique="true">
         <field name="serverName"/>
         <field name="dbName"/>
         <field name="tableName"/>
@@ -127,7 +127,7 @@
         <field name="URI"/>
         <field name="action"/>
         <field name="grantOption"/>
-	  </index>
+      </index>
       <field name="privilegeScope">
         <column name="PRIVILEGE_SCOPE" length="40" jdbc-type="VARCHAR"/>
       </field>
@@ -150,7 +150,7 @@
         <column name="ACTION" length="40" jdbc-type="VARCHAR"/>
       </field>
       <field name = "createTime">
-      	<column name = "CREATE_TIME" jdbc-type="BIGINT"/>
+        <column name = "CREATE_TIME" jdbc-type="BIGINT"/>
       </field>
       <field name="grantOption">
         <column name="WITH_GRANT_OPTION" length="1" jdbc-type="CHAR"/>
@@ -164,7 +164,7 @@
       <datastore-identity>
         <column name="GM_PRIVILEGE_ID"/>
       </datastore-identity>
-    <index name="GM_PRIVILEGE_INDEX" unique="true">
+      <index name="GM_PRIVILEGE_INDEX" unique="true">
         <field name="componentName"/>
         <field name="serviceName"/>
         <field name="resourceName0"/>
@@ -177,7 +177,7 @@
         <field name="resourceType3"/>
         <field name="action"/>
         <field name="grantOption"/>
-	  </index>
+      </index>
       <field name="componentName">
         <column name="COMPONENT_NAME" length="100" jdbc-type="VARCHAR"/>
       </field>

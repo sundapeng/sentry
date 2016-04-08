@@ -95,7 +95,7 @@ public class PolicyFile {
     }
     return this;
   }
-  public PolicyFile setUserGroupMapping(Multimap<String, String> mapping) {
+  public PolicyFile appendUserGroupMapping(Multimap<String, String> mapping) {
     usersToGroups.putAll(mapping);
     return this;
   }

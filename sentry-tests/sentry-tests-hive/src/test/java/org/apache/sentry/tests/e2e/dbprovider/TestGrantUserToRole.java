@@ -192,7 +192,7 @@ public class TestGrantUserToRole extends AbstractTestWithStaticConfiguration {
     statement.close();
     connection.close();
 
-    // user1 can access the t1, t3
+    // user2 can access the t1, t3
     connection = context.createConnection(USER2);
     statement = context.createStatement(connection);
     statement.execute("select c1 from t1");

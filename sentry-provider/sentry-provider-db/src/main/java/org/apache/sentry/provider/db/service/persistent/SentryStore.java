@@ -1336,18 +1336,16 @@ public class SentryStore {
     return convertToRoleNameSet(getRolesForUsers(pm, users));
   }
 
-  public Set<TSentryRole> getTSentryRolesByUserGroups(Set<String> groups, Set<String> users) {
+  public Set<TSentryRole> getTSentryRolesByUserNames(Set<String> users) {
     boolean rollbackTransaction = true;
     PersistenceManager pm = null;
     try {
       pm = openTransaction();
-      Set<MSentryRole> mSentryRoles = new HashSet<MSentryRole>();
-      mSentryRoles.addAll(getRolesForGroups(pm, groups));
-      mSentryRoles.addAll(getRolesForUsers(pm, users));
-      rollbackTransaction = false;
+      Set<MSentryRole> mSentryRoles = getRolesForUsers(pm, users);
       // Since {@link MSentryRole#getGroups()} is lazy-loading, the converting should be call
       // before transaction committed.
       Set<TSentryRole> result = convertToTSentryRoles(mSentryRoles);
+      rollbackTransaction = false;
       commitTransaction(pm);
       return result;
     } finally {

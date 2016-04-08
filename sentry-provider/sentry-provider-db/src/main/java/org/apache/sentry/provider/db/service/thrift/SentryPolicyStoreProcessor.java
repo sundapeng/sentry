@@ -503,6 +503,7 @@ public class SentryPolicyStoreProcessor implements SentryPolicyService.Iface {
     final Timer.Context timerContext = sentryMetrics.grantRoleTimer.time();
     TAlterSentryRoleAddUsersResponse response = new TAlterSentryRoleAddUsersResponse();
     try {
+      validateClientVersion(request.getProtocol_version());
       authorize(request.getRequestorUserName(), getRequestorGroups(request.getRequestorUserName()));
       CommitContext commitContext = sentryStore.alterSentryRoleAddUsers(request.getRoleName(),
           request.getUsers());
@@ -515,6 +516,9 @@ public class SentryPolicyStoreProcessor implements SentryPolicyService.Iface {
     } catch (SentryAccessDeniedException e) {
       LOGGER.error(e.getMessage(), e);
       response.setStatus(Status.AccessDenied(e.getMessage(), e));
+    } catch (SentryThriftAPIMismatchException e) {
+      LOGGER.error(e.getMessage(), e);
+      response.setStatus(Status.THRIFT_VERSION_MISMATCH(e.getMessage(), e));
     } catch (Exception e) {
       String msg = "Unknown error for request: " + request + ", message: " + e.getMessage();
       LOGGER.error(msg, e);
@@ -540,6 +544,7 @@ public class SentryPolicyStoreProcessor implements SentryPolicyService.Iface {
     final Timer.Context timerContext = sentryMetrics.grantRoleTimer.time();
     TAlterSentryRoleDeleteUsersResponse response = new TAlterSentryRoleDeleteUsersResponse();
     try {
+      validateClientVersion(request.getProtocol_version());
       authorize(request.getRequestorUserName(), getRequestorGroups(request.getRequestorUserName()));
       CommitContext commitContext = sentryStore.alterSentryRoleDeleteUsers(request.getRoleName(),
           request.getUsers());
@@ -552,6 +557,9 @@ public class SentryPolicyStoreProcessor implements SentryPolicyService.Iface {
     } catch (SentryAccessDeniedException e) {
       LOGGER.error(e.getMessage(), e);
       response.setStatus(Status.AccessDenied(e.getMessage(), e));
+    } catch (SentryThriftAPIMismatchException e) {
+      LOGGER.error(e.getMessage(), e);
+      response.setStatus(Status.THRIFT_VERSION_MISMATCH(e.getMessage(), e));
     } catch (Exception e) {
       String msg = "Unknown error for request: " + request + ", message: " + e.getMessage();
       LOGGER.error(msg, e);
@@ -677,6 +685,7 @@ public class SentryPolicyStoreProcessor implements SentryPolicyService.Iface {
     String userName = request.getUserName();
     boolean checkAllGroups = false;
     try {
+      validateClientVersion(request.getProtocol_version());
       // userName can't be empty
       if (StringUtils.isEmpty(userName)) {
         throw new SentryAccessDeniedException("The user name can't be empty.");
@@ -691,7 +700,7 @@ public class SentryPolicyStoreProcessor implements SentryPolicyService.Iface {
       if (!isAdmin && !userName.equals(requestor)) {
         throw new SentryAccessDeniedException("Access denied to list the roles for " + userName);
       }
-      roleSet = sentryStore.getTSentryRolesByUserGroups(userGroups, Sets.newHashSet(userName));
+      roleSet = sentryStore.getTSentryRolesByUserNames(Sets.newHashSet(userName));
       response.setRoles(roleSet);
       response.setStatus(Status.OK());
     } catch (SentryGroupNotFoundException e) {
@@ -706,6 +715,9 @@ public class SentryPolicyStoreProcessor implements SentryPolicyService.Iface {
     } catch (SentryAccessDeniedException e) {
       LOGGER.error(e.getMessage(), e);
       response.setStatus(Status.AccessDenied(e.getMessage(), e));
+    } catch (SentryThriftAPIMismatchException e) {
+      LOGGER.error(e.getMessage(), e);
+      response.setStatus(Status.THRIFT_VERSION_MISMATCH(e.getMessage(), e));
     } catch (Exception e) {
       String msg = "Unknown error for request: " + request + ", message: " + e.getMessage();
       LOGGER.error(msg, e);

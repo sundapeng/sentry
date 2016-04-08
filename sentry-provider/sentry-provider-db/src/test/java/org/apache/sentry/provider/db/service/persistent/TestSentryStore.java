@@ -2056,7 +2056,7 @@ public class TestSentryStore extends org.junit.Assert {
     TSentryActiveRoleSet thriftRoleSet = new TSentryActiveRoleSet(true, new HashSet<String>(Arrays.asList(roleName)));
 
     Set<String> privs =
-        sentryStore.listSentryPrivilegesForProvider(new HashSet<String>(Arrays.asList("group1")), new HashSet<String>(),
+        sentryStore.listSentryPrivilegesForProvider(new HashSet<String>(Arrays.asList("group1")), Sets.newHashSet(grantor),
                 thriftRoleSet, tSentryAuthorizable);
 
     assertTrue(privs.size() == 1);

@@ -1345,6 +1345,8 @@ public class SentryStore {
       mSentryRoles.addAll(getRolesForGroups(pm, groups));
       mSentryRoles.addAll(getRolesForUsers(pm, users));
       rollbackTransaction = false;
+      // Since {@link MSentryRole#getGroups()} is lazy-loading, the converting should be call
+      // before transaction committed.
       Set<TSentryRole> result = convertToTSentryRoles(mSentryRoles);
       commitTransaction(pm);
       return result;

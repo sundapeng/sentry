@@ -303,7 +303,6 @@ public class TestSentryStore extends org.junit.Assert {
     String group1 = "group1";
     String group2 = "group2";
     String group3 = "group3";
-    String grantor = "g1";
     Map<String, Set<String>> userToGroups = Maps.newHashMap();
     userToGroups.put(user1, Sets.newHashSet(group1));
     userToGroups.put(user2, Sets.newHashSet(group1));
@@ -313,40 +312,33 @@ public class TestSentryStore extends org.junit.Assert {
     sentryStore.createSentryRole(roleName1);
     sentryStore.createSentryRole(roleName2);
     sentryStore.createSentryRole(roleName3);
-    sentryStore.alterSentryRoleAddGroups(grantor, roleName1,
-        Sets.newHashSet(new TSentryGroup(group1)));
-    sentryStore.alterSentryRoleAddGroups(grantor, roleName2,
-        Sets.newHashSet(new TSentryGroup(group2)));
-    sentryStore.alterSentryRoleAddGroups(grantor, roleName2,
-        Sets.newHashSet(new TSentryGroup(group3)));
+    sentryStore.alterSentryRoleAddUsers(roleName1, Sets.newHashSet(user1));
+    sentryStore.alterSentryRoleAddUsers(roleName2, Sets.newHashSet(user2));
+    sentryStore.alterSentryRoleAddUsers(roleName2, Sets.newHashSet(user3));
     sentryStore.alterSentryRoleAddUsers(roleName3, Sets.newHashSet(user2, user4));
 
-    Set<TSentryRole> roles = sentryStore.getTSentryRolesByUserNames(
-        Sets.newHashSet(userToGroups.get(user1)), Sets.newHashSet(user1));
+    Set<TSentryRole> roles = sentryStore.getTSentryRolesByUserNames(Sets.newHashSet(user1));
     assertEquals(1, roles.size());
     for (TSentryRole role : roles) {
       assertTrue(roleName1.equals(role.getRoleName()));
     }
 
-    roles = sentryStore.getTSentryRolesByUserNames(Sets.newHashSet(userToGroups.get(user2)),
-        Sets.newHashSet(user2));
-    assertEquals(2, roles.size());
-    for (TSentryRole role : roles) {
-      assertTrue(roleName1.equals(role.getRoleName()) || roleName3.equals(role.getRoleName()));
-    }
-
-    roles = sentryStore.getTSentryRolesByUserNames(Sets.newHashSet(userToGroups.get(user3)),
-        Sets.newHashSet(user3));
-    assertEquals(2, roles.size());
-    for (TSentryRole role : roles) {
-      assertTrue(roleName1.equals(role.getRoleName()) || roleName2.equals(role.getRoleName()));
-    }
-
-    roles = sentryStore.getTSentryRolesByUserNames(Sets.newHashSet(userToGroups.get(user4)),
-        Sets.newHashSet(user4));
+    roles = sentryStore.getTSentryRolesByUserNames(Sets.newHashSet(user2));
     assertEquals(2, roles.size());
     for (TSentryRole role : roles) {
       assertTrue(roleName2.equals(role.getRoleName()) || roleName3.equals(role.getRoleName()));
+    }
+
+    roles = sentryStore.getTSentryRolesByUserNames(Sets.newHashSet(user3));
+    assertEquals(1, roles.size());
+    for (TSentryRole role : roles) {
+      assertTrue(roleName2.equals(role.getRoleName()));
+    }
+
+    roles = sentryStore.getTSentryRolesByUserNames(Sets.newHashSet(user4));
+    assertEquals(1, roles.size());
+    for (TSentryRole role : roles) {
+      assertTrue(roleName3.equals(role.getRoleName()));
     }
   }
 

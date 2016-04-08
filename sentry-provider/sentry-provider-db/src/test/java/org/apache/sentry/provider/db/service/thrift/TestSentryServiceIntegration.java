@@ -182,34 +182,31 @@ public class TestSentryServiceIntegration extends SentryServiceIntegrationBase {
         client.createRole(requestorUserName, roleName3);
 
         client.grantRoleToGroup(requestorUserName, group1, roleName1);
-        client.grantRoleToGroup(requestorUserName, group2, roleName2);
-        client.grantRoleToGroup(requestorUserName, group3, roleName2);
+        client.grantRoleToUser(requestorUserName, user2, roleName2);
+        client.grantRoleToUser(requestorUserName, user3, roleName2);
         client.grantRoleToUser(requestorUserName, user2, roleName3);
         client.grantRoleToUsers(requestorUserName, roleName3, Sets.newHashSet(user4));
         // following test cases also test the grantRoleToUser() and grantRoleToUsers() implicity
         // admin always can get the role list
         Set<TSentryRole> roles = client.listRolesByUserName(requestorUserName, user1);
-        assertEquals(1, roles.size());
-        for (TSentryRole role : roles) {
-          assertTrue(roleName1.equals(role.getRoleName()));
-        }
+        assertEquals(0, roles.size());
         // the role list includes the role for user and the role for user's group
         roles = client.listRolesByUserName(requestorUserName, user2);
         assertEquals(2, roles.size());
         for (TSentryRole role : roles) {
-          assertTrue(roleName1.equals(role.getRoleName()) || roleName3.equals(role.getRoleName()));
+          assertTrue(roleName2.equals(role.getRoleName()) || roleName3.equals(role.getRoleName()));
         }
         // user has 2 groups whose role list are different
         roles = client.listRolesByUserName(requestorUserName, user3);
-        assertEquals(2, roles.size());
+        assertEquals(1, roles.size());
         for (TSentryRole role : roles) {
-          assertTrue(roleName1.equals(role.getRoleName()) || roleName2.equals(role.getRoleName()));
+          assertTrue(roleName2.equals(role.getRoleName()));
         }
         // user has 2 groups whose role list are the same
         roles = client.listRolesByUserName(requestorUserName, user4);
-        assertEquals(2, roles.size());
+        assertEquals(1, roles.size());
         for (TSentryRole role : roles) {
-          assertTrue(roleName2.equals(role.getRoleName()) || roleName3.equals(role.getRoleName()));
+          assertTrue(roleName3.equals(role.getRoleName()));
         }
         // user can get his own role list if he isn't an admin
         roles = client.listRolesByUserName(user1, user1);
@@ -237,10 +234,7 @@ public class TestSentryServiceIntegration extends SentryServiceIntegrationBase {
           assertTrue(roleName1.equals(role.getRoleName()));
         }
         roles = client.listRolesByUserName(requestorUserName, user4);
-        assertEquals(1, roles.size());
-        for (TSentryRole role : roles) {
-          assertTrue(roleName2.equals(role.getRoleName()));
-        }
+        assertEquals(0, roles.size());
       }
     });
   }

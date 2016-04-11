@@ -95,11 +95,6 @@ public class PolicyFile {
     }
     return this;
   }
-  public PolicyFile addUserGroupMapping(Multimap<String, String> mapping) {
-    usersToGroups.putAll(mapping);
-    return this;
-  }
-
   public PolicyFile addDatabase(String databaseName, String path) {
     String oldPath;
     if((oldPath = databasesToPolicyFiles.put(databaseName, path)) != null) {

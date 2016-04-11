@@ -254,7 +254,7 @@ public class SentryGrantRevokeTask extends Task<DDLWork> implements Serializable
       } else if(operation.equals(RoleDDLDesc.RoleOperation.SHOW_CURRENT_ROLE)) {
         ActiveRoleSet roleSet = hiveAuthzBinding.getActiveRoleSet();
         if( roleSet.isAll()) {
-          Set<TSentryRole> roles = sentryClient.listRolesByUserName(subject, subject);
+          Set<TSentryRole> roles = sentryClient.listUserRoles(subject);
           writeToFile(writeRolesInfo(roles), desc.getResFile());
           return RETURN_CODE_SUCCESS;
         } else {

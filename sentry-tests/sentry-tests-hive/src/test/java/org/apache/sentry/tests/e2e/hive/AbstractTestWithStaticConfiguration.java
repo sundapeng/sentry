@@ -30,12 +30,13 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.HashSet;
 
-import com.google.common.collect.Sets;
-import org.junit.Assert;
+import javax.security.auth.Subject;
+import javax.security.auth.kerberos.KerberosPrincipal;
+import javax.security.auth.login.LoginContext;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.hadoop.conf.Configuration;
@@ -67,19 +68,15 @@ import org.apache.sentry.tests.e2e.minisentry.SentrySrvFactory.SentrySrvType;
 import org.apache.tools.ant.util.StringUtils;
 import org.junit.After;
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Maps;
-import com.google.common.collect.Multimap;
+import com.google.common.collect.Sets;
 import com.google.common.io.Files;
-
-import javax.security.auth.Subject;
-import javax.security.auth.kerberos.KerberosPrincipal;
-import javax.security.auth.login.LoginContext;
 
 public abstract class AbstractTestWithStaticConfiguration {
   private static final Logger LOGGER = LoggerFactory
@@ -145,7 +142,6 @@ public abstract class AbstractTestWithStaticConfiguration {
   protected static boolean enableSentryHA = false;
   protected static Context context;
   protected final String semanticException = "SemanticException No valid privileges";
-  protected static Multimap<String, String> additionalUsersToGroups = ArrayListMultimap.create();
 
   protected static boolean clientKerberos = false;
   protected static String REALM = System.getProperty("sentry.service.realm", "EXAMPLE.COM");
@@ -256,9 +252,6 @@ public abstract class AbstractTestWithStaticConfiguration {
 
     PolicyFile policyFile = PolicyFile.setAdminOnServer1(ADMIN1)
         .setUserGroupMapping(StaticUserGroup.getStaticMapping());
-    if (additionalUsersToGroups.size() > 0) {
-      policyFile.addUserGroupMapping(additionalUsersToGroups);
-    }
     policyFile.write(policyFileLocation);
 
     String policyURI;

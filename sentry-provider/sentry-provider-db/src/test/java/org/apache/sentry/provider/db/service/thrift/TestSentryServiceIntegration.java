@@ -209,18 +209,18 @@ public class TestSentryServiceIntegration extends SentryServiceIntegrationBase {
           assertTrue(roleName3.equals(role.getRoleName()));
         }
         // user can get his own role list if he isn't an admin
-        roles = client.listRolesByUserName(user1, user1);
+        roles = client.listRolesByUserName(user3, user3);
         assertEquals(1, roles.size());
         // user can't get other's role list if he isn't an admin
         try {
-          client.listRolesByUserName(user1, user2);
+          client.listRolesByUserName(user3, user2);
           fail("SentryAccessDeniedException should be caught.");
         } catch (SentryAccessDeniedException e) {
           // excepted exception
         }
         // the user's name can't be empty
         try {
-          client.listRolesByUserName(user1, "");
+          client.listRolesByUserName(user3, "");
           fail("SentryAccessDeniedException should be caught.");
         } catch (SentryAccessDeniedException e) {
           // excepted exception
@@ -231,7 +231,7 @@ public class TestSentryServiceIntegration extends SentryServiceIntegrationBase {
         roles = client.listRolesByUserName(requestorUserName, user2);
         assertEquals(1, roles.size());
         for (TSentryRole role : roles) {
-          assertTrue(roleName1.equals(role.getRoleName()));
+          assertTrue(roleName2.equals(role.getRoleName()));
         }
         roles = client.listRolesByUserName(requestorUserName, user4);
         assertEquals(0, roles.size());

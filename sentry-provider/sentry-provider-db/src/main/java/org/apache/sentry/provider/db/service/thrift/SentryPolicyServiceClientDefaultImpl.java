@@ -315,7 +315,10 @@ public class SentryPolicyServiceClientDefaultImpl implements SentryPolicyService
 
   public synchronized Set<TSentryRole> listUserRoles(String requestorUserName)
       throws SentryUserException {
-    return listRolesByGroupName(requestorUserName, AccessConstants.ALL);
+    Set<TSentryRole> tSentryRoles = Sets.newHashSet();
+    tSentryRoles.addAll(listRolesByGroupName(requestorUserName, AccessConstants.ALL));
+    tSentryRoles.addAll(listRolesByUserName(requestorUserName, requestorUserName));
+    return tSentryRoles;
   }
 
   public synchronized TSentryPrivilege grantURIPrivilege(String requestorUserName,

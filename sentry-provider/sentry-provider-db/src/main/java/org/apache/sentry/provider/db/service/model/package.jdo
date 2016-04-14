@@ -127,6 +127,7 @@
         <field name="URI"/>
         <field name="action"/>
         <field name="grantOption"/>
+        <field name="deny"/>
       </index>
       <field name="privilegeScope">
         <column name="PRIVILEGE_SCOPE" length="40" jdbc-type="VARCHAR"/>
@@ -154,6 +155,9 @@
       </field>
       <field name="grantOption">
         <column name="WITH_GRANT_OPTION" length="1" jdbc-type="CHAR"/>
+      </field>
+      <field name="deny">
+        <column name="DENY" length="1" jdbc-type="CHAR"/>
       </field>
       <field name="roles" mapped-by="privileges">
          <collection element-type="org.apache.sentry.provider.db.service.model.MSentryRole"/>

@@ -119,4 +119,9 @@ public class SqoopWildcardPrivilege implements Privilege {
     return false;
 
   }
+
+  @Override
+  public boolean isDenyPrivilege() {
+    return false;
+  }
 }

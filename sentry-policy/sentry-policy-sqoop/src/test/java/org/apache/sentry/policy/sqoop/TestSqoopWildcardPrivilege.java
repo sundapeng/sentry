@@ -126,6 +126,10 @@ public class TestSqoopWildcardPrivilege extends org.junit.Assert {
       public boolean implies(Privilege p) {
         return false;
       }
+      @Override
+      public boolean isDenyPrivilege() {
+        return false;
+      }
     };
     Privilege job1 = create(new KeyValue("SERVER", "server"), new KeyValue("JOB", "job1"));
     assertFalse(job1.implies(null));

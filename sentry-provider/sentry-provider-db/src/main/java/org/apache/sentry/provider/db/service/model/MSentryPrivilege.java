@@ -45,6 +45,7 @@ public class MSentryPrivilege {
   private String URI = "";
   private String action = "";
   private Boolean grantOption = false;
+  private Boolean deny = false;
   // roles this privilege is a part of
   private Set<MSentryRole> roles;
   private long createTime;
@@ -55,7 +56,7 @@ public class MSentryPrivilege {
 
   public MSentryPrivilege(String privilegeScope,
       String serverName, String dbName, String tableName, String columnName,
-      String URI, String action, Boolean grantOption) {
+      String URI, String action, Boolean grantOption, Boolean deny) {
     this.privilegeScope = privilegeScope;
     this.serverName = serverName;
     this.dbName = SentryStore.toNULLCol(dbName);
@@ -64,6 +65,7 @@ public class MSentryPrivilege {
     this.URI = SentryStore.toNULLCol(URI);
     this.action = SentryStore.toNULLCol(action);
     this.grantOption = grantOption;
+    this.deny = deny;
     this.roles = new HashSet<MSentryRole>();
   }
 
@@ -71,7 +73,7 @@ public class MSentryPrivilege {
       String serverName, String dbName, String tableName, String columnName,
       String URI, String action) {
     this(privilegeScope, serverName, dbName, tableName,
-        columnName, URI, action, false);
+        columnName, URI, action, false, false);
   }
 
   public MSentryPrivilege(MSentryPrivilege other) {
@@ -83,6 +85,7 @@ public class MSentryPrivilege {
     this.URI = SentryStore.toNULLCol(other.URI);
     this.action = SentryStore.toNULLCol(other.action);
     this.grantOption = other.grantOption;
+    this.deny = other.deny;
     this.roles = new HashSet<MSentryRole>();
     for (MSentryRole role : other.roles) {
       roles.add(role);
@@ -153,13 +156,21 @@ public class MSentryPrivilege {
     this.privilegeScope = privilegeScope;
   }
 
-   public Boolean getGrantOption() {
-     return grantOption;
-   }
+  public Boolean getGrantOption() {
+    return grantOption;
+  }
 
-   public void setGrantOption(Boolean grantOption) {
-     this.grantOption = grantOption;
-   }
+  public void setGrantOption(Boolean grantOption) {
+    this.grantOption = grantOption;
+  }
+
+  public Boolean getDeny() {
+    return deny;
+  }
+
+  public void setDeny(Boolean deny) {
+    this.deny = deny;
+  }
 
   public void appendRole(MSentryRole role) {
     roles.add(role);
@@ -180,7 +191,8 @@ public class MSentryPrivilege {
         + ", serverName=" + serverName + ", dbName=" + dbName
         + ", tableName=" + tableName + ", columnName=" + columnName
         + ", URI=" + URI + ", action=" + action + ", roles=[...]"
-        + ", createTime=" + createTime + ", grantOption=" + grantOption +"]";
+        + ", createTime=" + createTime + ", grantOption=" + grantOption
+        + ", deny=" + deny +"]";
   }
 
   @Override
@@ -197,6 +209,8 @@ public class MSentryPrivilege {
         + ((columnName == null) ? 0 : columnName.hashCode());
     result = prime * result
         + ((grantOption == null) ? 0 : grantOption.hashCode());
+    result = prime * result
+        + ((deny == null) ? 0 : deny.hashCode());
     return result;
   }
 
@@ -259,6 +273,13 @@ public class MSentryPrivilege {
         return false;
       }
     } else if (!grantOption.equals(other.grantOption)) {
+      return false;
+    }
+    if (deny == null) {
+      if (other.deny != null) {
+        return false;
+      }
+    } else if (!deny.equals(other.deny)) {
       return false;
     }
     return true;

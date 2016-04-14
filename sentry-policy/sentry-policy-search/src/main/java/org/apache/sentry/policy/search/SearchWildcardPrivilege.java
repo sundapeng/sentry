@@ -141,4 +141,9 @@ public class SearchWildcardPrivilege implements Privilege {
       return new SearchWildcardPrivilege(privilege);
     }
   }
+
+  @Override
+  public boolean isDenyPrivilege() {
+    return false;
+  }
 }

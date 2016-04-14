@@ -141,4 +141,9 @@ public class IndexerWildcardPrivilege implements Privilege {
       return new IndexerWildcardPrivilege(privilege);
     }
   }
+
+  @Override
+  public boolean isDenyPrivilege() {
+    return false;
+  }
 }

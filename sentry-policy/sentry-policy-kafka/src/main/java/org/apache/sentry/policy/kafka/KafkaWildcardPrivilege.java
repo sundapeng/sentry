@@ -143,4 +143,9 @@ public class KafkaWildcardPrivilege implements Privilege {
     }
     return sb.toString();
   }
+
+  @Override
+  public boolean isDenyPrivilege() {
+    return false;
+  }
 }

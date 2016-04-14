@@ -39,6 +39,11 @@ enum TSentryGrantOption {
   UNSET = -1
 }
 
+enum TSentryDenyOption {
+  TRUE = 1,
+  FALSE = 0
+}
+
 # Represents a Privilege in transport from the client to the server
 struct TSentryPrivilege {
 1: required string privilegeScope, # Valid values are SERVER, DATABASE, TABLE, COLUMN, URI

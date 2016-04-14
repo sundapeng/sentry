@@ -125,6 +125,11 @@ public class TestKafkaWildcardPrivilege {
       public boolean implies(Privilege p) {
         return false;
       }
+
+      @Override
+      public boolean isDenyPrivilege() {
+        return false;
+      }
     };
     Privilege topic1 = create(new KeyValue("HOST", "host"), new KeyValue("TOPIC", "topic1"));
     assertFalse(topic1.implies(null));

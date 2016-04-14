@@ -723,7 +723,7 @@ public class SentryStore {
 
     query.setFilter(filters.toString());
     query.setResult("privilegeScope, serverName, dbName, tableName, columnName," +
-        " URI, action, grantOption");
+        " URI, action, grantOption, deny");
     Set<MSentryPrivilege> privileges = new HashSet<MSentryPrivilege>();
     for (Object[] privObj : (List<Object[]>) query.execute()) {
       MSentryPrivilege priv = new MSentryPrivilege();
@@ -735,6 +735,7 @@ public class SentryStore {
       priv.setURI((String) privObj[5]);
       priv.setAction((String) privObj[6]);
       priv.setGrantOption((Boolean) privObj[7]);
+      priv.setDeny((boolean) privObj[8]);
       privileges.add(priv);
     }
     return privileges;
@@ -772,6 +773,7 @@ public class SentryStore {
         + "&& this.columnName == \"" + toNULLCol(safeTrimLower(tPriv.getColumnName())) + "\" "
         + "&& this.URI == \"" + toNULLCol(safeTrim(tPriv.getURI())) + "\" "
         + "&& this.grantOption == grantOption "
+        + "&& this.deny == " + tPriv.isDeny() + " "
         + "&& this.action == \"" + toNULLCol(safeTrimLower(tPriv.getAction())) + "\"");
     query.declareParameters("Boolean grantOption");
     query.setUnique(true);
@@ -1547,6 +1549,7 @@ public class SentryStore {
     privilege.setTableName(fromNULLCol(mSentryPrivilege.getTableName()));
     privilege.setColumnName(fromNULLCol(mSentryPrivilege.getColumnName()));
     privilege.setURI(fromNULLCol(mSentryPrivilege.getURI()));
+    privilege.setDeny(mSentryPrivilege.getDeny());
     if (mSentryPrivilege.getGrantOption() != null) {
       privilege.setGrantOption(TSentryGrantOption.valueOf(mSentryPrivilege.getGrantOption().toString().toUpperCase()));
     } else {
@@ -1570,6 +1573,7 @@ public class SentryStore {
     mSentryPrivilege.setAction(toNULLCol(safeTrimLower(privilege.getAction())));
     mSentryPrivilege.setCreateTime(System.currentTimeMillis());
     mSentryPrivilege.setURI(toNULLCol(safeTrim(privilege.getURI())));
+    mSentryPrivilege.setDeny(privilege.isDeny());
     if ( !privilege.getGrantOption().equals(TSentryGrantOption.UNSET) ) {
       mSentryPrivilege.setGrantOption(Boolean.valueOf(privilege.getGrantOption().toString()));
     } else {

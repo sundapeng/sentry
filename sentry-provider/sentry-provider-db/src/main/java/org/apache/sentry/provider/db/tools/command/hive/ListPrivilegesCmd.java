@@ -63,6 +63,7 @@ public class ListPrivilegesCmd implements Command {
       String action = tSentryPrivilege.getAction();
       String grantOption = (tSentryPrivilege.getGrantOption() == TSentryGrantOption.TRUE ? "true"
               : "false");
+      boolean deny = tSentryPrivilege.isDeny();
       if (!StringUtils.isEmpty(serverName)) {
         privileges.add(PolicyConstants.KV_JOINER.join(PolicyFileConstants.PRIVILEGE_SERVER_NAME,
                 serverName));
@@ -90,6 +91,10 @@ public class ListPrivilegesCmd implements Command {
       if ("true".equals(grantOption)) {
         privileges.add(PolicyConstants.KV_JOINER.join(
                 PolicyFileConstants.PRIVILEGE_GRANT_OPTION_NAME, grantOption));
+      }
+      if (deny == true) {
+        privileges.add(PolicyConstants.KV_JOINER.join(
+                PolicyFileConstants.PRIVILEGE_DENY_NAME, deny));
       }
     }
     return PolicyConstants.AUTHORIZABLE_JOINER.join(privileges);

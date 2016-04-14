@@ -28,4 +28,5 @@ public class PolicyFileConstants {
   public static final String PRIVILEGE_URI_NAME = "uri";
   public static final String PRIVILEGE_ACTION_NAME = "action";
   public static final String PRIVILEGE_GRANT_OPTION_NAME = "grantoption";
+  public static final String PRIVILEGE_DENY_NAME = "deny";
 }

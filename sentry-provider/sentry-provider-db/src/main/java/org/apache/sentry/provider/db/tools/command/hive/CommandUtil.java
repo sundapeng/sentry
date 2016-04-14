@@ -53,6 +53,8 @@ public class CommandUtil {
         TSentryGrantOption grantOption = "true".equalsIgnoreCase(value) ? TSentryGrantOption.TRUE
                 : TSentryGrantOption.FALSE;
         tSentryPrivilege.setGrantOption(grantOption);
+      } else if (PolicyFileConstants.PRIVILEGE_DENY_NAME.equalsIgnoreCase(key)) {
+        tSentryPrivilege.setDeny("true".equalsIgnoreCase(value));
       }
     }
     tSentryPrivilege.setPrivilegeScope(getPrivilegeScope(tSentryPrivilege));

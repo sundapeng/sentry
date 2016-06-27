@@ -23,6 +23,7 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -334,14 +335,17 @@ public abstract class MetastoreAuthzBindingBase extends MetaStorePreEventListene
 
   protected void authorizeDropPartition(PreDropPartitionEvent context)
       throws InvalidOperationException, MetaException {
-    authorizeMetastoreAccess(
+    String dbName = null, tableName = null;
+    Iterator<Partition> iterator = context.getPartitionIterator();
+    while (iterator.hasNext()) {
+      dbName = iterator.next().getDbName();
+      tableName = iterator.next().getTableName();
+    }
+
+      authorizeMetastoreAccess(
         HiveOperation.ALTERTABLE_DROPPARTS,
-        new HierarcyBuilder().addTableToOutput(getAuthServer(),
-            context.getPartition().getDbName(),
-            context.getPartition().getTableName()).build(),
-        new HierarcyBuilder().addTableToOutput(getAuthServer(),
-            context.getPartition().getDbName(),
-            context.getPartition().getTableName()).build());
+        new HierarcyBuilder().addTableToOutput(getAuthServer(), dbName, tableName).build(),
+        new HierarcyBuilder().addTableToOutput(getAuthServer(), dbName, tableName).build());
   }
 
   private void authorizeAlterPartition(PreAlterPartitionEvent context)
